@@ -4,7 +4,12 @@
         "url": "https://github.com/dpjanes/iotdb-fs/issues"
     }, 
     "dependencies": {
-        "iotdb": ">=0.6.3"
+        "bluebird-q": "",
+        "content-type": "",
+        "iotdb-errors": "",
+        "iotdb-helpers": "",
+        "mime": "",
+        "mkdirp": ""
     }, 
     "description": "IOTDB Module", 
     "devDependencies": {
@@ -19,7 +24,6 @@
         "request": "^2.36.0"
     }, 
     "homepage": "https://github.com/dpjanes/node-iotdb",
-    "iotdb": {}, 
     "license": "Apache-2.0", 
     "main": "index.js", 
     "name": "iotdb-fs", 
@@ -31,5 +35,5 @@
     "scripts": {
         "test": "grunt"
     }, 
-    "version": "0.0.0"
+    "version": "1.0.0"
 }

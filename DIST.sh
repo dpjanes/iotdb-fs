@@ -6,7 +6,6 @@
 #   2017-08-03
 #
 
-exit 0
 PACKAGE=iotdb-fs
 DIST_ROOT=/var/tmp/.dist.$$
 
