@@ -1,0 +1,35 @@
+{
+    "author": "David P. Janes <davidjanes@iotdb.org> (https://iotdb.org)", 
+    "bugs": {
+        "url": "https://github.com/dpjanes/iotdb-fs/issues"
+    }, 
+    "dependencies": {
+        "iotdb": ">=0.6.3"
+    }, 
+    "description": "IOTDB Module", 
+    "devDependencies": {
+        "grunt": "~0.4.5", 
+        "grunt-contrib-jshint": "~0.10.0", 
+        "grunt-contrib-nodeunit": "~0.2.0", 
+        "grunt-contrib-uglify": "~0.5.0", 
+        "grunt-contrib-watch": "~0.5.0", 
+        "grunt-jsbeautifier": "^0.2.7", 
+        "jshint-stylish": "~0.1.3", 
+        "load-grunt-tasks": "~0.2.0", 
+        "request": "^2.36.0"
+    }, 
+    "homepage": "https://github.com/dpjanes/node-iotdb",
+    "iotdb": {}, 
+    "license": "Apache-2.0", 
+    "main": "index.js", 
+    "name": "iotdb-fs", 
+    "private": false, 
+    "repository": {
+        "type": "git", 
+        "url": "https://github.com/dpjanes/iotdb-fs"
+    }, 
+    "scripts": {
+        "test": "grunt"
+    }, 
+    "version": "0.0.0"
+}

@@ -1,0 +1,16 @@
+{
+  "esversion": 6,
+  "curly": true,
+  "eqeqeq": true,
+  "immed": true,
+  "latedef": "nofunc",
+  "newcap": false,
+  "noarg": true,
+  "sub": true,
+  "undef": true,
+  "unused": "var",
+  "boss": true,
+  "eqnull": true,
+  "node": true,
+  "-W086": true
+}
