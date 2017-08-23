@@ -135,6 +135,71 @@ describe("list", function() {
                     })
                     .catch(done)
             })
+            it("parer", function(done) {
+                Q({
+                    path: "data",
+                    parer: name => name === "subfolder",
+                })
+                    .then(fs.list.recursive)
+                    .then(sd => {
+                        const got = sd.paths.sort()
+                        const expected = [ 'data/a.json', 'data/b.json', "data/c.txt", "data/subfolder", ];
+
+                        assert.deepEqual(got, expected)
+
+                        done();
+                    })
+                    .catch(done)
+            })
+            it("parer (no hits)", function(done) {
+                Q({
+                    path: "data",
+                    parer: name => name === "does-not-exist",
+                })
+                    .then(fs.list.recursive)
+                    .then(sd => {
+                        const got = sd.paths.sort()
+                        const expected = [ 'data/a.json', 'data/b.json', "data/c.txt", "data/subfolder", "data/subfolder/a.json" ];
+
+                        assert.deepEqual(got, expected)
+
+                        done();
+                    })
+                    .catch(done)
+            })
+            it("parer_path", function(done) {
+                Q({
+                    path: "data",
+                    parer_path: path => path === "data/subfolder",
+                })
+                    .then(fs.list.recursive)
+                    .then(sd => {
+                        const got = sd.paths.sort()
+                        const expected = [ 'data/a.json', 'data/b.json', "data/c.txt", "data/subfolder", ];
+
+                        assert.deepEqual(got, expected)
+
+                        done();
+                    })
+                    .catch(done)
+            })
+            it("parer + filter", function(done) {
+                Q({
+                    path: "data",
+                    parer: name => name === "subfolder",
+                    filter: name => name.endsWith(".json"),
+                })
+                    .then(fs.list.recursive)
+                    .then(sd => {
+                        const got = sd.paths.sort()
+                        const expected = [ 'data/a.json', 'data/b.json', ];
+
+                        assert.deepEqual(got, expected)
+
+                        done();
+                    })
+                    .catch(done)
+            })
         })
     })
 })
