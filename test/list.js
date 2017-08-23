@@ -25,6 +25,8 @@
 const _ = require("iotdb-helpers");
 const fs = require("..");
 
+const assert = require("assert");
+
 const Q = require("bluebird-q");
 
 describe("list", function() {
@@ -33,7 +35,51 @@ describe("list", function() {
         })
         describe("good", function() {
             it("works", function(done) {
-                done();
+                Q({
+                    path: "data",
+                })
+                    .then(fs.list)
+                    .then(sd => {
+                        const got = sd.paths.sort()
+                        const expected = [ 'data/a.json', 'data/b.json', 'data/c.txt', 'data/subfolder' ];
+
+                        assert.deepEqual(got, expected)
+
+                        done();
+                    })
+                    .catch(done)
+            })
+            it("filter", function(done) {
+                Q({
+                    path: "data",
+                    filter: name => name.endsWith(".json"),
+                })
+                    .then(fs.list)
+                    .then(sd => {
+                        const got = sd.paths.sort()
+                        const expected = [ 'data/a.json', 'data/b.json', ];
+
+                        assert.deepEqual(got, expected)
+
+                        done();
+                    })
+                    .catch(done)
+            })
+            it("filter_path", function(done) {
+                Q({
+                    path: "data",
+                    filter_path: path => path.endsWith(".json") && path.startsWith("data/"),
+                })
+                    .then(fs.list)
+                    .then(sd => {
+                        const got = sd.paths.sort()
+                        const expected = [ 'data/a.json', 'data/b.json', ];
+
+                        assert.deepEqual(got, expected)
+
+                        done();
+                    })
+                    .catch(done)
             })
         })
     })
