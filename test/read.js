@@ -125,7 +125,21 @@ describe("read", function() {
         })
         describe("good", function() {
             it("works", function(done) {
-                done();
+                Q({
+                    path: "data/a.json",
+                })
+                    .then(fs.read.json)
+                    .then(sd => {
+                        const expected_json = { a: 0, b: 1, note: 'in data' }
+
+                        assert.deepEqual(sd.json, expected_json);
+                        assert.ok(!sd.document);
+                        assert.ok(!sd.document_media_type);
+                        assert.ok(!sd.document_encoding);
+
+                        done();
+                    })
+                    .catch(done)
             })
         })
     })
