@@ -25,6 +25,8 @@
 const _ = require("iotdb-helpers");
 const fs = require("..");
 
+const assert = require("assert");
+
 const Q = require("bluebird-q");
 
 describe("truncate", function() {

@@ -25,6 +25,8 @@
 const _ = require("iotdb-helpers");
 const fs = require("..");
 
+const assert = require("assert");
+
 const Q = require("bluebird-q");
 
 describe("read", function() {
@@ -51,7 +53,20 @@ describe("read", function() {
         })
         describe("good", function() {
             it("works", function(done) {
-                done();
+                Q({
+                    path: "data/c.txt",
+                })
+                    .then(fs.read.utf8)
+                    .then(sd => {
+                        const expected_document = "Hello World\n你好，世界\nこんにちは世界\n";
+                        const expected_document_media_type = "text/plain";
+
+                        assert.deepEqual(sd.document, expected_document);
+                        assert.deepEqual(sd.document_media_type, expected_document_media_type);
+
+                        done();
+                    })
+                    .catch(done)
             })
         })
     })
