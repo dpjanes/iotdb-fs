@@ -29,6 +29,8 @@ const assert = require("assert");
 
 const Q = require("bluebird-q");
 
+process.chdir(__dirname);
+
 describe("write", function() {
     describe("core", function() {
         describe("bad", function() {
