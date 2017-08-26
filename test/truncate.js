@@ -1,9 +1,9 @@
 /*
- *  lib/index.js
+ *  test/truncate.js
  *
  *  David Janes
  *  IOTDB.org
- *  2017-08-03
+ *  2017-08-23
  *
  *  Copyright [2013-2017] [David P. Janes]
  *
@@ -22,12 +22,23 @@
 
 "use strict";
 
-module.exports = Object.assign(
-    {},
-    require("./list"),
-    require("./read"),
-    require("./mkdir"),
-    require("./write"),
-    require("./truncate"),
-    {}
-);
+const _ = require("iotdb-helpers");
+const fs = require("..");
+
+const assert = require("assert");
+
+const Q = require("bluebird-q");
+
+process.chdir(__dirname);
+
+describe("truncate", function() {
+    describe("core", function() {
+        describe("bad", function() {
+        })
+        describe("good", function() {
+            it("works", function(done) {
+                done();
+            })
+        })
+    })
+})

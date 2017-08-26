@@ -23,3 +23,4 @@
 "use strict";
 
 module.exports = require("./lib")
+module.exports.fs = require("fs")
