@@ -42,6 +42,18 @@ if (action("read-jsons")) {
         .catch(error => console.log("#", error))
 }
 
+// this is way better than above
+if (action("all-jsons")) {
+    Q({
+        path: "..",
+        filter: name => name.endsWith(".json"),
+    })
+        .then(fs.list)
+        .then(fs.all(fs.read.json))
+        .then(sd => console.log("+", "ok", sd.jsons))
+        .catch(error => console.log("#", error))
+}
+
 if (action("write.json")) {
     Q({
         path: "delete-me/write-json.json",
