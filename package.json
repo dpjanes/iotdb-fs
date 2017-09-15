@@ -4,7 +4,6 @@
         "url": "https://github.com/dpjanes/iotdb-fs/issues"
     }, 
     "dependencies": {
-        "bluebird-q": "~2.1.1", 
         "content-type": "~1.0.2", 
         "iotdb-errors": "~3.0.5", 
         "iotdb-helpers": "~3.1.2", 
