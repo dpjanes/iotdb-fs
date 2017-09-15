@@ -15,7 +15,6 @@ const fs = require("..");
 
 const assert = require("assert");
 
-const Q = require("bluebird-q");
 const minimist = require('minimist');
 
 const ad = minimist(process.argv.slice(2));
@@ -23,7 +22,7 @@ const ad = minimist(process.argv.slice(2));
 const action = (name) => ad._.indexOf(name) > -1;
 
 if (action("list")) {
-    Q({
+    _.promise.make({
         path: "..",
     })
         .then(fs.list)
@@ -32,7 +31,7 @@ if (action("list")) {
 }
 
 if (action("read-jsons")) {
-    Q({
+    _.promise.make({
         path: "..",
     })
         .then(fs.list)
@@ -44,7 +43,7 @@ if (action("read-jsons")) {
 
 // this is way better than above
 if (action("all-jsons")) {
-    Q({
+    _.promise.make({
         path: "..",
         filter: name => name.endsWith(".json"),
     })
@@ -55,7 +54,7 @@ if (action("all-jsons")) {
 }
 
 if (action("write.json")) {
-    Q({
+    _.promise.make({
         path: "delete-me/write-json.json",
         json: { "hello": "world" },
     })
@@ -66,7 +65,7 @@ if (action("write.json")) {
 }
 
 if (action("write.utf8")) {
-    Q({
+    _.promise.make({
         path: "delete-me/write-json.txt",
         document: "Hello, world / 你好，世界\n",
     })
@@ -77,7 +76,7 @@ if (action("write.utf8")) {
 }
 
 if (action("write")) {
-    Q({
+    _.promise.make({
         path: "delete-me/write-json.txt",
         document: "Hello, world / 你好，世界\n",
         document_encoding: "utf-8",
@@ -89,7 +88,7 @@ if (action("write")) {
 }
 
 if (action("write.buffer")) {
-    Q({
+    _.promise.make({
         path: "delete-me/write-json.txt",
         document: Buffer.from("Hello, world / 你好，世界\n", "utf-8"),
     })
