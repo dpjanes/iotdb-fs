@@ -254,11 +254,35 @@ describe("read", function() {
         })
     })
     describe("read.stdin", function() {
+        beforeEach(function() {
+            const Readable = require('stream').Readable;
+            const s = new Readable();
+            s._read = _.noop;
+            s.push("Hello World\n你好，世界\nこんにちは世界\n");
+            s.push(null);
+
+            fs.read.shims.stdin = s;
+        })
+        afterEach(function() {
+            fs.read.shims.stdin = process.stdin;
+        })
+
         describe("bad", function() {
         })
         describe("good", function() {
             it("works", function(done) {
-                done();
+                Q({})
+                    .then(fs.read.stdin)
+                    .then(sd => {
+                        const expected_document = "Hello World\n你好，世界\nこんにちは世界\n";
+
+                        assert.deepEqual(sd.document, expected_document);
+                        assert.ok(!sd.document_media_type);
+                        assert.ok(!sd.document_encoding);
+
+                        done();
+                    })
+                    .catch(done)
             })
         })
     })
