@@ -34,6 +34,30 @@ process.chdir(__dirname);
 describe("list", function() {
     describe("core", function() {
         describe("bad", function() {
+            it("bad folder", function(done) {
+                Q({
+                    path: "data-does-not-exist",
+                })
+                    .then(fs.list)
+                    .then(sd => {
+                        done(new Error("did not expect to get here"))
+                    })
+                    .catch(error => {
+                        done()
+                    })
+            })
+            it("bad folder - recursive", function(done) {
+                Q({
+                    path: "data-does-not-exist",
+                })
+                    .then(fs.list.recursive)
+                    .then(sd => {
+                        done(new Error("did not expect to get here"))
+                    })
+                    .catch(error => {
+                        done()
+                    })
+            })
         })
         describe("good", function() {
             it("works", function(done) {

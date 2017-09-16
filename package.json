@@ -33,6 +33,7 @@
         "url": "https://github.com/dpjanes/iotdb-fs"
     }, 
     "scripts": {
+        "cover": "istanbul cover _mocha", 
         "test": "grunt"
     }, 
     "version": "1.0.7"
