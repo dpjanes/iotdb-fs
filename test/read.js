@@ -34,6 +34,18 @@ process.chdir(__dirname);
 describe("read", function() {
     describe("core", function() {
         describe("bad", function() {
+            it("file does not exist", function(done) {
+                Q({
+                    path: "data/does-not-exist",
+                })
+                    .then(fs.read)
+                    .then(sd => {
+                        done(new Error("did not expect to get here"))
+                    })
+                    .catch(error => {
+                        done()
+                    })
+            })
         })
         describe("good", function() {
             it("using document_encoding latin1", function(done) {
@@ -73,10 +85,37 @@ describe("read", function() {
                     })
                     .catch(done)
             })
+            it("otherwise", function(done) {
+                Q({
+                    path: "data/does-not-exist",
+                    otherwise: 123, 
+                })
+                    .then(fs.read)
+                    .then(sd => {
+                        const expected_document = 123;
+
+                        assert.deepEqual(sd.document, expected_document);
+
+                        done();
+                    })
+                    .catch(done)
+            })
         })
     })
     describe("read.buffer", function() {
         describe("bad", function() {
+            it("file does not exist", function(done) {
+                Q({
+                    path: "data/does-not-exist",
+                })
+                    .then(fs.read.buffer)
+                    .then(sd => {
+                        done(new Error("did not expect to get here"))
+                    })
+                    .catch(error => {
+                        done()
+                    })
+            })
         })
         describe("good", function() {
             it("works", function(done) {
@@ -97,10 +136,37 @@ describe("read", function() {
                     })
                     .catch(done)
             })
+            it("otherwise", function(done) {
+                Q({
+                    path: "data/does-not-exist",
+                    otherwise: 123, 
+                })
+                    .then(fs.read.buffer)
+                    .then(sd => {
+                        const expected_document = 123;
+
+                        assert.deepEqual(sd.document, expected_document);
+
+                        done();
+                    })
+                    .catch(done)
+            })
         })
     })
     describe("read.utf8", function() {
         describe("bad", function() {
+            it("file does not exist", function(done) {
+                Q({
+                    path: "data/does-not-exist",
+                })
+                    .then(fs.read.utf8)
+                    .then(sd => {
+                        done(new Error("did not expect to get here"))
+                    })
+                    .catch(error => {
+                        done()
+                    })
+            })
         })
         describe("good", function() {
             it("works", function(done) {
@@ -120,10 +186,37 @@ describe("read", function() {
                     })
                     .catch(done)
             })
+            it("otherwise", function(done) {
+                Q({
+                    path: "data/does-not-exist",
+                    otherwise: 123, 
+                })
+                    .then(fs.read.utf8)
+                    .then(sd => {
+                        const expected_document = 123;
+
+                        assert.deepEqual(sd.document, expected_document);
+
+                        done();
+                    })
+                    .catch(done)
+            })
         })
     })
     describe("read.json", function() {
         describe("bad", function() {
+            it("file does not exist", function(done) {
+                Q({
+                    path: "data/does-not-exist",
+                })
+                    .then(fs.read.json)
+                    .then(sd => {
+                        done(new Error("did not expect to get here"))
+                    })
+                    .catch(error => {
+                        done()
+                    })
+            })
         })
         describe("good", function() {
             it("works", function(done) {
@@ -138,6 +231,21 @@ describe("read", function() {
                         assert.ok(!sd.document);
                         assert.ok(!sd.document_media_type);
                         assert.ok(!sd.document_encoding);
+
+                        done();
+                    })
+                    .catch(done)
+            })
+            it("otherwise", function(done) {
+                Q({
+                    path: "data/does-not-exist",
+                    otherwise: 123, 
+                })
+                    .then(fs.read.json)
+                    .then(sd => {
+                        const expected_json = 123;
+
+                        assert.deepEqual(sd.json, expected_json);
 
                         done();
                     })
