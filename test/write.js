@@ -26,18 +26,124 @@ const _ = require("iotdb-helpers");
 const fs = require("..");
 
 const assert = require("assert");
+const path = require("path");
 
 const Q = require("bluebird-q");
 
 process.chdir(__dirname);
 
 describe("write", function() {
+    const TEST_FOLDER = "tmp";
+
     describe("core", function() {
         describe("bad", function() {
         })
         describe("good", function() {
             it("works", function(done) {
-                done()
+                const MESSAGE = "Hello World\n你好，世界\nこんにちは世界\n";
+                const PATH = path.join(TEST_FOLDER, "out.txt");
+
+                Q({
+                    path: PATH,
+                    document: MESSAGE,
+                    document_encoding: "utf-8",
+                })
+                    .then(fs.mkdir.parent)
+                    .then(fs.unlink)
+                    .then(fs.write)
+                    .then(sd => {
+                        const result = fs.fs.readFileSync(PATH, "utf-8")
+                        
+                        assert.deepEqual(result, MESSAGE);
+
+                        done();
+                    })
+                    .catch(done)
+            })
+        })
+    })
+    describe("parameterized", function() {
+        describe("bad", function() {
+        })
+        describe("good", function() {
+            it("works - 0 args", function(done) {
+                const MESSAGE = "Hello World\n你好，世界\nこんにちは世界\n";
+                const PATH = path.join(TEST_FOLDER, "out.txt");
+
+                Q({
+                    path: PATH,
+                    document: MESSAGE,
+                })
+                    .then(fs.mkdir.parent)
+                    .then(fs.unlink)
+                    .then(fs.write.p())
+                    .then(sd => {
+                        const result = fs.fs.readFileSync(PATH, "utf-8")
+                        
+                        assert.deepEqual(result, MESSAGE);
+
+                        done();
+                    })
+                    .catch(done)
+            })
+            it("works - 1 args", function(done) {
+                const MESSAGE = "Hello World\n你好，世界\nこんにちは世界\n";
+                const PATH = path.join(TEST_FOLDER, "out.txt");
+
+                Q({
+                    path: PATH,
+                    document: MESSAGE,
+                })
+                    .then(fs.mkdir.parent)
+                    .then(fs.unlink)
+                    .then(fs.write.p(PATH))
+                    .then(sd => {
+                        const result = fs.fs.readFileSync(PATH, "utf-8")
+                        
+                        assert.deepEqual(result, MESSAGE);
+
+                        done();
+                    })
+                    .catch(done)
+            })
+            it("works - 2 args", function(done) {
+                const MESSAGE = "Hello World\n你好，世界\nこんにちは世界\n";
+                const PATH = path.join(TEST_FOLDER, "out.txt");
+
+                Q({
+                    path: PATH,
+                })
+                    .then(fs.mkdir.parent)
+                    .then(fs.unlink)
+                    .then(fs.write.p(PATH, MESSAGE))
+                    .then(sd => {
+                        const result = fs.fs.readFileSync(PATH, "utf-8")
+                        
+                        assert.deepEqual(result, MESSAGE);
+
+                        done();
+                    })
+                    .catch(done)
+            })
+            it("works - 3 args", function(done) {
+                const MESSAGE = "Hello World\n你好，世界\nこんにちは世界\n";
+                const PATH = path.join(TEST_FOLDER, "out.usc2");
+                const ENCODING = 'ucs2';
+
+                Q({
+                    path: PATH,
+                })
+                    .then(fs.mkdir.parent)
+                    .then(fs.unlink)
+                    .then(fs.write.p(PATH, MESSAGE, ENCODING))
+                    .then(sd => {
+                        const result = fs.fs.readFileSync(PATH, ENCODING);
+                        
+                        assert.deepEqual(result, MESSAGE);
+
+                        done();
+                    })
+                    .catch(done)
             })
         })
     })
@@ -46,7 +152,24 @@ describe("write", function() {
         })
         describe("good", function() {
             it("works", function(done) {
-                done()
+                const MESSAGE = Buffer.from("Hello World\n你好，世界\nこんにちは世界\n", "utf8");
+                const PATH = path.join(TEST_FOLDER, "out.txt");
+
+                Q({
+                    path: PATH,
+                    document: MESSAGE,
+                })
+                    .then(fs.mkdir.parent)
+                    .then(fs.unlink)
+                    .then(fs.write.buffer)
+                    .then(sd => {
+                        const result = fs.fs.readFileSync(PATH)
+                        
+                        assert.deepEqual(result, MESSAGE);
+
+                        done();
+                    })
+                    .catch(done)
             })
         })
     })
@@ -64,7 +187,24 @@ describe("write", function() {
         })
         describe("good", function() {
             it("works", function(done) {
-                done()
+                const MESSAGE = "Hello World\n你好，世界\nこんにちは世界\n";
+                const PATH = path.join(TEST_FOLDER, "out.txt");
+
+                Q({
+                    path: PATH,
+                    document: MESSAGE,
+                })
+                    .then(fs.mkdir.parent)
+                    .then(fs.unlink)
+                    .then(fs.write.utf8)
+                    .then(sd => {
+                        const result = fs.fs.readFileSync(PATH, "utf-8")
+                        
+                        assert.deepEqual(result, MESSAGE);
+
+                        done();
+                    })
+                    .catch(done)
             })
         })
     })
@@ -73,7 +213,24 @@ describe("write", function() {
         })
         describe("good", function() {
             it("works", function(done) {
-                done()
+                const MESSAGE = { "out": "there", "now": _.timestamp.make() };
+                const PATH = path.join(TEST_FOLDER, "out.json");
+
+                Q({
+                    path: PATH,
+                    json: MESSAGE,
+                })
+                    .then(fs.mkdir.parent)
+                    .then(fs.unlink)
+                    .then(fs.write.json)
+                    .then(sd => {
+                        const result = JSON.parse(fs.fs.readFileSync(PATH, "utf-8"))
+                        
+                        assert.deepEqual(result, MESSAGE);
+
+                        done();
+                    })
+                    .catch(done)
             })
         })
     })
