@@ -107,6 +107,8 @@ describe("read", function() {
                         const fd = {};
                         sd.outputs.forEach(output => fd[output.path] = output)
 
+                        assert.deepEqual(sd.outputs.map(output => output.document), sd.documents)
+
                         {
                             const path = 'data/a.json';
                             const output = fd[path];
