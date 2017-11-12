@@ -36,5 +36,5 @@
         "cover": "istanbul cover _mocha", 
         "test": "grunt"
     }, 
-    "version": "1.0.13"
+    "version": "1.0.14"
 }
