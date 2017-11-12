@@ -163,10 +163,17 @@ its result in `self.json`
         .then(fs.write.buffer)
         .then(sd => console.log("+", "ok", sd.path))
 
-## `fs.unlink`: remove file
+## `fs.remove`: remove file
 
-Note that no error is reported if the file
-does not exist
+Note that no error is reported if the file does not exist
+
+## `fs.remove.directory`: remove directory
+
+Note that no error is reported if the directory does not exist
+
+## `fs.remove.recursive`: remove a bunch off stuff
+
+NOT IMPLEMENTED
 
 ## `fs.tmpfile`: make a temporary file
 
@@ -177,3 +184,51 @@ The file will disappear when the process exits.
 
 `self.document_length` can be used to control
 where the truncation happens
+
+## `fs.exists`: does it exist?
+
+Test whether an object on the filesystem exists.
+`self.exists` will be set to `true` or `false`
+as appropriate
+
+    _.promise.make({
+        path: "doc.txt",
+    })
+        .then(fs.exists)
+        .then(sd => console.log("+", "ok", sd.path, sd.exists)
+
+## `fs.is.*`: test file type
+
+Test whether an object is of a certain type
+`self.exists` will be set to `true` or `false`
+as appropriate
+
+### `fs.is.file`: is it a normal file type
+
+NOT IMPLEMENTED YET
+
+    _.promise.make({
+        path: "doc.txt",
+    })
+        .then(fs.is.file)
+        .then(sd => console.log("+", "ok", sd.path, "is-file", sd.exists)
+
+### `fs.is.file`: is it a normal file type
+
+NOT IMPLEMENTED YET
+
+    _.promise.make({
+        path: ".",
+    })
+        .then(fs.is.directory)
+        .then(sd => console.log("+", "ok", sd.path, "is-directory", sd.exists)
+
+### `fs.is.symbolic_link`: is it a symbolic link
+
+NOT IMPLEMENTED YET
+
+    _.promise.make({
+        path: ".",
+    })
+        .then(fs.is.symbolic_link)
+        .then(sd => console.log("+", "ok", sd.path, "is-symbolic-link", sd.exists)
