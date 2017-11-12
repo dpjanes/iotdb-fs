@@ -49,7 +49,7 @@ describe("write", function() {
                     document_encoding: "utf-8",
                 })
                     .then(fs.mkdir.parent)
-                    .then(fs.unlink)
+                    .then(fs.remove)
                     .then(fs.write)
                     .then(sd => {
                         const result = fs.fs.readFileSync(PATH, "utf-8")
@@ -75,7 +75,7 @@ describe("write", function() {
                     document: MESSAGE,
                 })
                     .then(fs.mkdir.parent)
-                    .then(fs.unlink)
+                    .then(fs.remove)
                     .then(fs.write.p())
                     .then(sd => {
                         const result = fs.fs.readFileSync(PATH, "utf-8")
@@ -95,7 +95,7 @@ describe("write", function() {
                     document: MESSAGE,
                 })
                     .then(fs.mkdir.parent)
-                    .then(fs.unlink)
+                    .then(fs.remove)
                     .then(fs.write.p(PATH))
                     .then(sd => {
                         const result = fs.fs.readFileSync(PATH, "utf-8")
@@ -114,7 +114,7 @@ describe("write", function() {
                     path: PATH,
                 })
                     .then(fs.mkdir.parent)
-                    .then(fs.unlink)
+                    .then(fs.remove)
                     .then(fs.write.p(PATH, MESSAGE))
                     .then(sd => {
                         const result = fs.fs.readFileSync(PATH, "utf-8")
@@ -134,7 +134,7 @@ describe("write", function() {
                     path: PATH,
                 })
                     .then(fs.mkdir.parent)
-                    .then(fs.unlink)
+                    .then(fs.remove)
                     .then(fs.write.p(PATH, MESSAGE, ENCODING))
                     .then(sd => {
                         const result = fs.fs.readFileSync(PATH, ENCODING);
@@ -160,7 +160,7 @@ describe("write", function() {
                     document: MESSAGE,
                 })
                     .then(fs.mkdir.parent)
-                    .then(fs.unlink)
+                    .then(fs.remove)
                     .then(fs.write.buffer)
                     .then(sd => {
                         const result = fs.fs.readFileSync(PATH)
@@ -195,7 +195,7 @@ describe("write", function() {
                     document: MESSAGE,
                 })
                     .then(fs.mkdir.parent)
-                    .then(fs.unlink)
+                    .then(fs.remove)
                     .then(fs.write.utf8)
                     .then(sd => {
                         const result = fs.fs.readFileSync(PATH, "utf-8")
@@ -221,7 +221,7 @@ describe("write", function() {
                     json: MESSAGE,
                 })
                     .then(fs.mkdir.parent)
-                    .then(fs.unlink)
+                    .then(fs.remove)
                     .then(fs.write.json)
                     .then(sd => {
                         const result = JSON.parse(fs.fs.readFileSync(PATH, "utf-8"))
