@@ -1,5 +1,5 @@
 /*
- *  test/mkdir.js
+ *  test/make.js
  *
  *  David Janes
  *  IOTDB.org
@@ -31,8 +31,8 @@ const Q = require("bluebird-q");
 
 process.chdir(__dirname);
 
-describe("mkdir", function() {
-    describe("core", function() {
+describe("make", function() {
+    describe("make.directory", function() {
         describe("bad", function() {
         })
         describe("good", function() {
@@ -41,7 +41,7 @@ describe("mkdir", function() {
             })
         })
     })
-    describe("mkdir.parent", function() {
+    describe("make.directory.parent", function() {
         describe("bad", function() {
         })
         describe("good", function() {
