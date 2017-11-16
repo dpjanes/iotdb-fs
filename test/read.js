@@ -27,7 +27,6 @@ const fs = require("..");
 
 const assert = require("assert");
 
-const Q = require("bluebird-q");
 
 process.chdir(__dirname);
 
@@ -35,7 +34,7 @@ describe("read", function() {
     describe("core", function() {
         describe("bad", function() {
             it("file does not exist", function(done) {
-                Q({
+                _.promise.make({
                     path: "data/does-not-exist",
                 })
                     .then(fs.read)
@@ -49,7 +48,7 @@ describe("read", function() {
         })
         describe("good", function() {
             it("using document_encoding latin1", function(done) {
-                Q({
+                _.promise.make({
                     path: "data/c.txt",
                     document_encoding: "latin1",
                 })
@@ -68,7 +67,7 @@ describe("read", function() {
                     .catch(done)
             })
             it("using document_encoding utf-8", function(done) {
-                Q({
+                _.promise.make({
                     path: "data/c.txt",
                     document_encoding: "utf-8",
                 })
@@ -86,7 +85,7 @@ describe("read", function() {
                     .catch(done)
             })
             it("otherwise", function(done) {
-                Q({
+                _.promise.make({
                     path: "data/does-not-exist",
                     otherwise: 123, 
                 })
@@ -105,7 +104,7 @@ describe("read", function() {
     describe("read.buffer", function() {
         describe("bad", function() {
             it("file does not exist", function(done) {
-                Q({
+                _.promise.make({
                     path: "data/does-not-exist",
                 })
                     .then(fs.read.buffer)
@@ -119,7 +118,7 @@ describe("read", function() {
         })
         describe("good", function() {
             it("works", function(done) {
-                Q({
+                _.promise.make({
                     path: "data/c.txt",
                 })
                     .then(fs.read.buffer)
@@ -137,7 +136,7 @@ describe("read", function() {
                     .catch(done)
             })
             it("otherwise", function(done) {
-                Q({
+                _.promise.make({
                     path: "data/does-not-exist",
                     otherwise: 123, 
                 })
@@ -156,7 +155,7 @@ describe("read", function() {
     describe("read.utf8", function() {
         describe("bad", function() {
             it("file does not exist", function(done) {
-                Q({
+                _.promise.make({
                     path: "data/does-not-exist",
                 })
                     .then(fs.read.utf8)
@@ -170,7 +169,7 @@ describe("read", function() {
         })
         describe("good", function() {
             it("works", function(done) {
-                Q({
+                _.promise.make({
                     path: "data/c.txt",
                 })
                     .then(fs.read.utf8)
@@ -187,7 +186,7 @@ describe("read", function() {
                     .catch(done)
             })
             it("otherwise", function(done) {
-                Q({
+                _.promise.make({
                     path: "data/does-not-exist",
                     otherwise: 123, 
                 })
@@ -206,7 +205,7 @@ describe("read", function() {
     describe("read.json", function() {
         describe("bad", function() {
             it("file does not exist", function(done) {
-                Q({
+                _.promise.make({
                     path: "data/does-not-exist",
                 })
                     .then(fs.read.json)
@@ -220,7 +219,7 @@ describe("read", function() {
         })
         describe("good", function() {
             it("works", function(done) {
-                Q({
+                _.promise.make({
                     path: "data/a.json",
                 })
                     .then(fs.read.json)
@@ -237,7 +236,7 @@ describe("read", function() {
                     .catch(done)
             })
             it("otherwise", function(done) {
-                Q({
+                _.promise.make({
                     path: "data/does-not-exist",
                     otherwise: 123, 
                 })
@@ -271,7 +270,7 @@ describe("read", function() {
         })
         describe("good", function() {
             it("works", function(done) {
-                Q({})
+                _.promise.make({})
                     .then(fs.read.stdin)
                     .then(sd => {
                         const expected_document = "Hello World\n你好，世界\nこんにちは世界\n";

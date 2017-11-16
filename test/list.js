@@ -27,7 +27,6 @@ const fs = require("..");
 
 const assert = require("assert");
 
-const Q = require("bluebird-q");
 
 process.chdir(__dirname);
 
@@ -35,7 +34,7 @@ describe("list", function() {
     describe("core", function() {
         describe("bad", function() {
             it("bad folder", function(done) {
-                Q({
+                _.promise.make({
                     path: "data-does-not-exist",
                 })
                     .then(fs.list)
@@ -47,7 +46,7 @@ describe("list", function() {
                     })
             })
             it("bad folder - recursive", function(done) {
-                Q({
+                _.promise.make({
                     path: "data-does-not-exist",
                 })
                     .then(fs.list.recursive)
@@ -61,7 +60,7 @@ describe("list", function() {
         })
         describe("good", function() {
             it("works", function(done) {
-                Q({
+                _.promise.make({
                     path: "data",
                 })
                     .then(fs.list)
@@ -76,7 +75,7 @@ describe("list", function() {
                     .catch(done)
             })
             it("filter", function(done) {
-                Q({
+                _.promise.make({
                     path: "data",
                     filter: name => name.endsWith(".json"),
                 })
@@ -92,7 +91,7 @@ describe("list", function() {
                     .catch(done)
             })
             it("filter_path", function(done) {
-                Q({
+                _.promise.make({
                     path: "data",
                     filter_path: path => path.endsWith(".json") && path.startsWith("data/"),
                 })
@@ -114,7 +113,7 @@ describe("list", function() {
         })
         describe("good", function() {
             it("works", function(done) {
-                Q({
+                _.promise.make({
                     path: "data",
                 })
                     .then(fs.list.recursive)
@@ -129,7 +128,7 @@ describe("list", function() {
                     .catch(done)
             })
             it("filter", function(done) {
-                Q({
+                _.promise.make({
                     path: "data",
                     filter: name => name.endsWith(".json"),
                 })
@@ -146,7 +145,7 @@ describe("list", function() {
                     .catch(done)
             })
             it("filter_path", function(done) {
-                Q({
+                _.promise.make({
                     path: "data",
                     filter_path: path => path.endsWith(".json") && path.startsWith("data/"),
                 })
@@ -162,7 +161,7 @@ describe("list", function() {
                     .catch(done)
             })
             it("parer", function(done) {
-                Q({
+                _.promise.make({
                     path: "data",
                     parer: name => name === "subfolder",
                 })
@@ -178,7 +177,7 @@ describe("list", function() {
                     .catch(done)
             })
             it("parer (no hits)", function(done) {
-                Q({
+                _.promise.make({
                     path: "data",
                     parer: name => name === "does-not-exist",
                 })
@@ -194,7 +193,7 @@ describe("list", function() {
                     .catch(done)
             })
             it("parer_path", function(done) {
-                Q({
+                _.promise.make({
                     path: "data",
                     parer_path: path => path === "data/subfolder",
                 })
@@ -210,7 +209,7 @@ describe("list", function() {
                     .catch(done)
             })
             it("parer + filter", function(done) {
-                Q({
+                _.promise.make({
                     path: "data",
                     parer: name => name === "subfolder",
                     filter: name => name.endsWith(".json"),

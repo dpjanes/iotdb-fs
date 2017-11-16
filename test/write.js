@@ -28,7 +28,6 @@ const fs = require("..");
 const assert = require("assert");
 const path = require("path");
 
-const Q = require("bluebird-q");
 
 process.chdir(__dirname);
 
@@ -43,7 +42,7 @@ describe("write", function() {
                 const MESSAGE = "Hello World\n你好，世界\nこんにちは世界\n";
                 const PATH = path.join(TEST_FOLDER, "out.txt");
 
-                Q({
+                _.promise.make({
                     path: PATH,
                     document: MESSAGE,
                     document_encoding: "utf-8",
@@ -70,7 +69,7 @@ describe("write", function() {
                 const MESSAGE = "Hello World\n你好，世界\nこんにちは世界\n";
                 const PATH = path.join(TEST_FOLDER, "out.txt");
 
-                Q({
+                _.promise.make({
                     path: PATH,
                     document: MESSAGE,
                 })
@@ -90,7 +89,7 @@ describe("write", function() {
                 const MESSAGE = "Hello World\n你好，世界\nこんにちは世界\n";
                 const PATH = path.join(TEST_FOLDER, "out.txt");
 
-                Q({
+                _.promise.make({
                     path: PATH,
                     document: MESSAGE,
                 })
@@ -110,7 +109,7 @@ describe("write", function() {
                 const MESSAGE = "Hello World\n你好，世界\nこんにちは世界\n";
                 const PATH = path.join(TEST_FOLDER, "out.txt");
 
-                Q({
+                _.promise.make({
                     path: PATH,
                 })
                     .then(fs.mkdir.parent)
@@ -130,7 +129,7 @@ describe("write", function() {
                 const PATH = path.join(TEST_FOLDER, "out.usc2");
                 const ENCODING = 'ucs2';
 
-                Q({
+                _.promise.make({
                     path: PATH,
                 })
                     .then(fs.mkdir.parent)
@@ -155,7 +154,7 @@ describe("write", function() {
                 const MESSAGE = Buffer.from("Hello World\n你好，世界\nこんにちは世界\n", "utf8");
                 const PATH = path.join(TEST_FOLDER, "out.txt");
 
-                Q({
+                _.promise.make({
                     path: PATH,
                     document: MESSAGE,
                 })
@@ -190,7 +189,7 @@ describe("write", function() {
                 const MESSAGE = "Hello World\n你好，世界\nこんにちは世界\n";
                 const PATH = path.join(TEST_FOLDER, "out.txt");
 
-                Q({
+                _.promise.make({
                     path: PATH,
                     document: MESSAGE,
                 })
@@ -216,7 +215,7 @@ describe("write", function() {
                 const MESSAGE = { "out": "there", "now": _.timestamp.make() };
                 const PATH = path.join(TEST_FOLDER, "out.json");
 
-                Q({
+                _.promise.make({
                     path: PATH,
                     json: MESSAGE,
                 })

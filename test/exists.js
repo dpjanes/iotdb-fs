@@ -27,13 +27,12 @@ const fs = require("..");
 
 const assert = require("assert");
 
-const Q = require("bluebird-q");
 
 process.chdir(__dirname);
 
 describe("exists", function() {
     it("file does not exist", function(done) {
-        Q({
+        _.promise.make({
             path: "data/does-not-exist",
         })
             .then(fs.exists)
@@ -44,7 +43,7 @@ describe("exists", function() {
             .catch(done)
     })
     it("file exists", function(done) {
-        Q({
+        _.promise.make({
             path: "data/c.txt",
         })
             .then(fs.exists)

@@ -27,7 +27,6 @@ const fs = require("..");
 
 const assert = require("assert");
 
-const Q = require("bluebird-q");
 
 process.chdir(__dirname);
 

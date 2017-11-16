@@ -27,7 +27,6 @@ const fs = require("..");
 
 const assert = require("assert");
 
-const Q = require("bluebird-q");
 
 process.chdir(__dirname);
 
@@ -35,7 +34,7 @@ describe("read", function() {
     describe("all", function() {
         describe("good", function() {
             it("read all json", function(done) {
-                Q({
+                _.promise.make({
                     path: "data",
                 })
                     .then(fs.list)
@@ -98,7 +97,7 @@ describe("read", function() {
                     .catch(done)
             })
             it("read all utf-8", function(done) {
-                Q({
+                _.promise.make({
                     path: "data",
                 })
                     .then(fs.list)
