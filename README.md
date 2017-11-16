@@ -88,25 +88,23 @@ Failures will reported in `self.outputs`.
         .then(fs.list.recursive)
         .then(sd => console.log("+", "ok", sd.paths))
 
-## `fs.mkdir`: make directories
+## `fs.make.directory`: make directories
 
 Note that no error is reported if the folder
 already exists
 
-### `fs.mkdir` - make folder
-
     _.promise.make({
         path: "delete-me",
     })
-        .then(fs.mkdir.parent)
+        .then(fs.make.directory.parent)
 
-### `fs.mkdir.parent` - make parent folder
+### `fs.make.directory.parent` - make parent folder
 
     _.promise.make({
         path: "delete-me/write-json.json",
         json: { "hello": "world" },
     })
-        .then(fs.mkdir.parent)
+        .then(fs.make.directory.parent)
         .then(fs.write.json)
    
 ## `fs.read` - read files
@@ -149,7 +147,7 @@ its result in `self.json`
         path: "write.txt",
         document: "Hello, world / 你好，世界\n",
     })
-        .then(fs.mkdir.parent)
+        .then(fs.make.directory.parent)
         .then(fs.write.utf8)
         .then(sd => console.log("+", "ok", sd.path))
 
@@ -159,7 +157,7 @@ its result in `self.json`
         path: "write.txt",
         document: Buffer.from("Hello, world / 你好，世界\n", "utf-8"),
     })
-        .then(fs.mkdir.parent)
+        .then(fs.make.directory.parent)
         .then(fs.write.buffer)
         .then(sd => console.log("+", "ok", sd.path))
 
