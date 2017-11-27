@@ -7,7 +7,7 @@
         "content-type": "~1.0.4", 
         "iotdb-errors": "~3.0.6", 
         "iotdb-helpers": "~3.1.19", 
-        "mime": "~1.5.0", 
+        "mime": "~1.6.0", 
         "mkdirp": "~0.5.1", 
         "tmp": "~0.0.33"
     }, 
@@ -16,7 +16,7 @@
         "grunt": "~1.0.1", 
         "grunt-contrib-jshint": "~1.1.0", 
         "grunt-contrib-nodeunit": "~1.0.0", 
-        "grunt-contrib-uglify": "~3.1.0", 
+        "grunt-contrib-uglify": "~3.2.1", 
         "grunt-contrib-watch": "~1.0.0", 
         "grunt-jsbeautifier": "~0.2.13", 
         "jshint-stylish": "~2.2.1", 
@@ -36,5 +36,5 @@
         "cover": "istanbul cover _mocha", 
         "test": "grunt"
     }, 
-    "version": "1.0.21"
+    "version": "1.0.22"
 }
