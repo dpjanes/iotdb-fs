@@ -6,7 +6,7 @@
     "dependencies": {
         "content-type": "~1.0.4", 
         "iotdb-errors": "~3.0.6", 
-        "iotdb-helpers": "~3.1.20", 
+        "iotdb-helpers": "~3.1.23", 
         "mime": "~2.0.3", 
         "mkdirp": "~0.5.1", 
         "tmp": "~0.0.33"
@@ -36,5 +36,5 @@
         "cover": "istanbul cover _mocha", 
         "test": "grunt"
     }, 
-    "version": "1.0.24"
+    "version": "1.0.25"
 }
