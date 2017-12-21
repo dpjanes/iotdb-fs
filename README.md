@@ -77,9 +77,11 @@ Failures will reported in `self.outputs`.
         .then(fs.list.recursive)
         .then(sd => console.log("+", "ok", sd.paths))
 
-### filter
+#### filter
 
-`filter` passes the filename. `filter_path` is also available.
+`filter` checks the filename. `filter_path` is also available.
+
+This will only return files named `*.json`.
 
     _.promise.make({
         path: ".",
@@ -87,6 +89,47 @@ Failures will reported in `self.outputs`.
     })
         .then(fs.list.recursive)
         .then(sd => console.log("+", "ok", sd.paths))
+
+#### parer
+
+`parer` checks the filename; if it does not match that particular
+file will not be considered for recursion. 
+`parer_path` is also available.
+
+In the following examples, files in the `.git` folder are ignored 
+(note that the `.git` folder itself _will_ be listed).
+
+    _.promise.make({
+        path: ".",
+        parer: name === ".git",
+    })
+        .then(fs.list.recursive)
+        .then(sd => console.log("+", "ok", sd.paths))
+
+#### search depth first
+
+    _.promise.make({
+        path: ".",
+        parer: name === ".git",
+    })
+        .then(fs.list.depth_first)
+        .then(sd => console.log("+", "ok", sd.paths))
+
+#### sort names
+
+    _.promise.make({
+        path: ".",
+        sorter: fs.sorter.natural_ignore_case,
+    })
+        .then(fs.list)
+        .then(sd => console.log("+", "ok", sd.paths))
+
+Options (so far) are:
+
+* `fs.sorter.natural` - A, B, C, a, b, c, 
+* `fs.sorter.natural_ignore_case` - A, a, B, b, C, c
+
+_We need to add an option for a locale-sensitive sort_
 
 ## `fs.make.directory`: make directories
 

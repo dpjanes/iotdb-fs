@@ -30,6 +30,27 @@ if (action("list")) {
         .catch(error => console.log("#", error))
 }
 
+if (action("list-recursive")) {
+    _.promise.make({
+        path: "..",
+        parer: path => path === ".git",
+    })
+        .then(fs.list.recursive)
+        .then(sd => console.log("+", "ok", sd.paths))
+        .catch(error => console.log("#", error))
+}
+
+if (action("list-depth-first")) {
+    _.promise.make({
+        path: "..",
+        parer: path => path === ".git",
+        sorter: fs.sorter.natural_ignore_case,
+    })
+        .then(fs.list.depth_first)
+        .then(sd => console.log("+", "ok", sd.paths))
+        .catch(error => console.log("#", error))
+}
+
 if (action("read-jsons")) {
     _.promise.make({
         path: "..",
