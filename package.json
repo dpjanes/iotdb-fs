@@ -5,7 +5,7 @@
     }, 
     "dependencies": {
         "iotdb-errors": "~3.1.5", 
-        "iotdb-helpers": "~3.1.29", 
+        "iotdb-helpers": "~3.2.2", 
         "mime": "~2.2.0", 
         "mkdirp": "~0.5.1", 
         "tmp": "~0.0.33"
@@ -35,5 +35,5 @@
         "cover": "nyc --reporter=html mocha --recursive", 
         "test": "mocha --recursive --bail"
     }, 
-    "version": "1.0.27"
+    "version": "1.0.28"
 }
