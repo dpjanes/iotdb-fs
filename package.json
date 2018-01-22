@@ -4,7 +4,6 @@
         "url": "https://github.com/dpjanes/iotdb-fs/issues"
     }, 
     "dependencies": {
-        "content-type": "~1.0.4", 
         "iotdb-errors": "~3.1.5", 
         "iotdb-helpers": "~3.1.29", 
         "mime": "~2.2.0", 
@@ -33,8 +32,8 @@
         "url": "https://github.com/dpjanes/iotdb-fs"
     }, 
     "scripts": {
-        "cover": "istanbul cover _mocha", 
-        "test": "grunt"
+        "cover": "nyc --reporter=html mocha --recursive", 
+        "test": "mocha --recursive --bail"
     }, 
     "version": "1.0.27"
 }
