@@ -168,10 +168,18 @@ its result in `self.json`
 ### `fs.read.json` - read into JSON
 
     _.promise.make({
-        path: "info.son",
+        path: "info.json",
     })
         .then(fs.read.json)
         .then(sd => console.log("+", "ok", sd.json))
+
+## `fs.read.json` -- magic JSON reading
+
+This will work with `.csv`, `.txt` and `.yaml` files, as 
+well as "-" for stdin.
+
+You must independently install `js-yaml` and/or `csvtojson`
+according to your needs.
 
 ### `fs.read.utf8` - read UTF-8 document
 
