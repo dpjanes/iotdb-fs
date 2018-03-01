@@ -5,14 +5,14 @@
     }, 
     "dependencies": {
         "iotdb-errors": "~3.1.6", 
-        "iotdb-helpers": "~3.2.4", 
+        "iotdb-helpers": "~3.2.8", 
         "mime": "~2.2.0", 
         "mkdirp": "~0.5.1", 
         "tmp": "~0.0.33"
     }, 
     "description": "Pipe-oriented FS operations", 
     "devDependencies": {
-        "grunt": "~1.0.1", 
+        "grunt": "~1.0.2", 
         "grunt-contrib-jshint": "~1.1.0", 
         "grunt-contrib-nodeunit": "~1.0.0", 
         "grunt-contrib-uglify": "~3.3.0", 
@@ -35,5 +35,5 @@
         "cover": "nyc --reporter=html mocha --recursive", 
         "test": "mocha --recursive --bail"
     }, 
-    "version": "1.0.29"
+    "version": "1.0.30"
 }
