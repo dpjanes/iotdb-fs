@@ -5,22 +5,22 @@
     }, 
     "dependencies": {
         "iotdb-errors": "~3.1.6", 
-        "iotdb-helpers": "~3.2.8", 
-        "mime": "~2.2.0", 
+        "iotdb-helpers": "~3.2.17", 
+        "mime": "~2.3.1", 
         "mkdirp": "~0.5.1", 
         "tmp": "~0.0.33"
     }, 
     "description": "Pipe-oriented FS operations", 
     "devDependencies": {
-        "grunt": "~1.0.2", 
+        "grunt": "~1.0.3", 
         "grunt-contrib-jshint": "~1.1.0", 
         "grunt-contrib-nodeunit": "~1.0.0", 
         "grunt-contrib-uglify": "~3.3.0", 
-        "grunt-contrib-watch": "~1.0.0", 
+        "grunt-contrib-watch": "~1.1.0", 
         "grunt-jsbeautifier": "~0.2.13", 
         "jshint-stylish": "~2.2.1", 
         "load-grunt-tasks": "~3.5.2", 
-        "request": "~2.83.0"
+        "request": "~2.87.0"
     }, 
     "homepage": "https://github.com/dpjanes/node-iotdb", 
     "license": "Apache-2.0", 
@@ -35,5 +35,5 @@
         "cover": "nyc --reporter=html mocha --recursive", 
         "test": "mocha --recursive --bail"
     }, 
-    "version": "1.0.30"
+    "version": "1.0.31"
 }
