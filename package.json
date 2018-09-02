@@ -4,8 +4,8 @@
         "url": "https://github.com/dpjanes/iotdb-fs/issues"
     }, 
     "dependencies": {
-        "iotdb-errors": "~3.1.6", 
-        "iotdb-helpers": "~3.2.17", 
+        "iotdb-errors": "~3.1.8", 
+        "iotdb-helpers": "~3.2.20", 
         "mime": "~2.3.1", 
         "mkdirp": "~0.5.1", 
         "tmp": "~0.0.33"
@@ -15,12 +15,12 @@
         "grunt": "~1.0.3", 
         "grunt-contrib-jshint": "~1.1.0", 
         "grunt-contrib-nodeunit": "~1.0.0", 
-        "grunt-contrib-uglify": "~3.3.0", 
+        "grunt-contrib-uglify": "~3.4.0", 
         "grunt-contrib-watch": "~1.1.0", 
         "grunt-jsbeautifier": "~0.2.13", 
         "jshint-stylish": "~2.2.1", 
         "load-grunt-tasks": "~3.5.2", 
-        "request": "~2.87.0"
+        "request": "~2.88.0"
     }, 
     "homepage": "https://github.com/dpjanes/node-iotdb", 
     "license": "Apache-2.0", 
@@ -35,5 +35,5 @@
         "cover": "nyc --reporter=html mocha --recursive", 
         "test": "mocha --recursive --bail"
     }, 
-    "version": "1.0.31"
+    "version": "1.0.32"
 }
