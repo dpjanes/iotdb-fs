@@ -26,5 +26,6 @@ module.exports = Object.assign(
     {},
     require("./document_content_type"),
     require("./document_name"),
+    require("./document"),
     {}
 );

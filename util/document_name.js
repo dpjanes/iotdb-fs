@@ -29,18 +29,22 @@ const path = require("iotdb-fs")
 /**
  *  Given a path, produce a document name
  */
-const document_name = _.promise(self => {
-    _.promise.validate(self, document_name)
+const from_path = _.promise(self => {
+    _.promise.validate(self, from_path)
 
-    self.document_name = path.basename(self.path)
+    self.from_path = path.basename(self.path)
 })
 
-document_name.method = "util.document_name"
-document_name.requires = {
+from_path.method = "util.from_path"
+from_path.requires = {
     path: _.is.String,
 }
 
 /**
  *  API
  */
-exports.document_name = document_name
+exports.document_name = {
+    from: {
+        path: from_path,
+    },
+}
