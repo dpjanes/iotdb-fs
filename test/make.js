@@ -118,4 +118,88 @@ describe("make", function() {
             })
         })
     })
+    describe("make.link", function() {
+        describe("bad", function() {
+        })
+        describe("good", function() {
+            it("works", function(done) {
+                const src = path.join(__dirname, "tmp", "link-src-" + _.random.id(20))
+                const dst = path.join(__dirname, "tmp", "link-dst-" + _.random.id(20))
+
+                _.promise()
+                    // source
+                    .then(fs.write.p(src, "Hello, World", "utf-8"))
+
+                    // link it
+                    .add({
+                        "path": src,
+                        "destination": dst,
+                    })
+                    .then(fs.make.link)
+
+                    // test it
+                    .add("path", dst)
+                    .then(fs.exists)
+                    .make(sd => {
+                        assert.ok(sd.exists)
+                    })
+                    .then(fs.stat)
+                    .make(sd => {
+                        assert.ok(sd.stats.isFile())
+                    })
+
+                    // cleanup
+                    .add("path", src)
+                    .then(fs.remove)
+                    .add("path", dst)
+                    .then(fs.remove)
+
+                    .end(done)
+            })
+        })
+    })
+    describe("make.link.symbolic", function() {
+        describe("bad", function() {
+        })
+        describe("good", function() {
+            it("works", function(done) {
+                const src = path.join(__dirname, "tmp", "slink-src-" + _.random.id(20))
+                const dst = path.join(__dirname, "tmp", "slink-dst-" + _.random.id(20))
+
+                _.promise()
+                    // source
+                    .then(fs.write.p(src, "Hello, World", "utf-8"))
+
+                    // link it
+                    .add({
+                        "path": src,
+                        "destination": dst,
+                    })
+                    .then(fs.make.link.symbolic)
+
+                    // test it
+                    .add("path", dst)
+                    .then(fs.exists)
+                    .make(sd => {
+                        assert.ok(sd.exists)
+                    })
+                    .then(fs.stat)
+                    .make(sd => {
+                        assert.ok(sd.stats.isFile())
+                    })
+                    .then(fs.stat.symbolic)
+                    .make(sd => {
+                        assert.ok(sd.stats.isSymbolicLink())
+                    })
+
+                    // cleanup
+                    .add("path", src)
+                    .then(fs.remove)
+                    .add("path", dst)
+                    .then(fs.remove)
+
+                    .end(done)
+            })
+        })
+    })
 })
