@@ -10,15 +10,6 @@
     }, 
     "description": "Pipe-oriented FS operations", 
     "devDependencies": {
-        "grunt": "~1.0.3", 
-        "grunt-contrib-jshint": "~1.1.0", 
-        "grunt-contrib-nodeunit": "~1.0.0", 
-        "grunt-contrib-uglify": "~3.4.0", 
-        "grunt-contrib-watch": "~1.1.0", 
-        "grunt-jsbeautifier": "~0.2.13", 
-        "jshint-stylish": "~2.2.1", 
-        "load-grunt-tasks": "~3.5.2", 
-        "request": "~2.88.0"
     }, 
     "homepage": "https://github.com/dpjanes/node-iotdb", 
     "license": "Apache-2.0", 
