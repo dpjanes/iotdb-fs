@@ -20,13 +20,13 @@
  *  limitations under the License.
  */
 
-"use strict";
+"use strict"
 
-const _ = require("iotdb-helpers");
-const fs = require("..");
+const _ = require("iotdb-helpers")
+const fs = require("..")
 
-const assert = require("assert");
-
+const assert = require("assert")
+const path = require("path")
 
 process.chdir(__dirname);
 
@@ -36,7 +36,33 @@ describe("make", function() {
         })
         describe("good", function() {
             it("works", function(done) {
-                done();
+                const name = "dir-" + _.random.id()
+                const p = path.join(__dirname, "tmp", name)
+
+                _.promise({
+                    path: p,
+                })
+                    // should not exist
+                    .then(fs.exists)
+                    .make(sd => {
+                        assert.ok(!sd.exists)
+                    })
+
+                    // now should exist
+                    .then(fs.make.directory)
+                    .then(fs.exists)
+                    .make(sd => {
+                        assert.ok(sd.exists)
+                    })
+                    .then(fs.stat)
+                    .make(sd => {
+                        assert.ok(sd.stats.isDirectory())
+                    })
+
+                    // cleanup
+                    .then(fs.remove.directory)
+
+                    .end(done)
             })
         })
     })
