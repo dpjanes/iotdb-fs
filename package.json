@@ -6,9 +6,7 @@
     "dependencies": {
         "iotdb-errors": "~3.1.8", 
         "iotdb-helpers": "~3.2.20", 
-        "mime": "~2.3.1", 
-        "mkdirp": "~0.5.1", 
-        "tmp": "~0.0.33"
+        "mime": "~2.3.1"
     }, 
     "description": "Pipe-oriented FS operations", 
     "devDependencies": {
