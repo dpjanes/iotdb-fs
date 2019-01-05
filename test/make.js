@@ -37,10 +37,11 @@ describe("make", function() {
         describe("good", function() {
             it("works", function(done) {
                 const name = "dir-" + _.random.id()
-                const p = path.join(__dirname, "tmp", name)
+                const p_parent = path.join(__dirname, "tmp", name)
+                const p_dir = path.join(__dirname, "tmp", name, "subfolder")
 
                 _.promise({
-                    path: p,
+                    path: p_dir,
                 })
                     // should not exist
                     .then(fs.exists)
@@ -60,6 +61,9 @@ describe("make", function() {
                     })
 
                     // cleanup
+                    .add("path", p_dir)
+                    .then(fs.remove.directory)
+                    .add("path", p_parent)
                     .then(fs.remove.directory)
 
                     .end(done)
@@ -71,7 +75,46 @@ describe("make", function() {
         })
         describe("good", function() {
             it("works", function(done) {
-                done();
+                const name = "dir-" + _.random.id()
+                const p_dir = path.join(__dirname, "tmp", name)
+                const p_file = path.join(__dirname, "tmp", name, "file.txt")
+
+                _.promise()
+                    // should not exist
+                    .add("path", p_dir)
+                    .then(fs.exists)
+                    .make(sd => {
+                        assert.ok(!sd.exists)
+                    })
+
+                    // make parent
+                    .add("path", p_file)
+                    .then(fs.make.directory.parent)
+
+                    // file should not exist
+                    .add("path", p_file)
+                    .then(fs.exists)
+                    .make(sd => {
+                        assert.ok(!sd.exists)
+                    })
+ 
+                    // directory should exist and be a directory
+                    .add("path", p_dir)
+                    .then(fs.exists)
+                    .make(sd => {
+                        assert.ok(sd.exists)
+                    })
+
+                    .then(fs.stat)
+                    .make(sd => {
+                        assert.ok(sd.stats.isDirectory())
+                    })
+
+                    // cleanup
+                    .add("path", p_dir)
+                    .then(fs.remove.directory)
+
+                    .end(done)
             })
         })
     })
