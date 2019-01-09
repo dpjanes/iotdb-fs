@@ -289,4 +289,3 @@ For security and efficiency reason, some code from third party modules has
 been directly included in this module (in `./contrib`)
 
 * https://www.npmjs.com/package/mkdirp
-* https://www.npmjs.com/package/tmp

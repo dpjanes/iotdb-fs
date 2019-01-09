@@ -6,8 +6,7 @@
     "dependencies": {
         "iotdb-errors": "~3.1.8", 
         "iotdb-helpers": "~3.3.2", 
-        "mime": "~2.4.0", 
-        "rimraf": "~2.6.3"
+        "mime": "~2.4.0"
     }, 
     "description": "Pipe-oriented FS operations", 
     "homepage": "https://github.com/dpjanes/node-iotdb", 

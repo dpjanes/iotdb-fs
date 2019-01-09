@@ -118,3 +118,17 @@ if (action("write.buffer")) {
         .then(sd => console.log("+", "ok", sd.path))
         .catch(error => console.log("#", error))
 }
+
+if (action("tmpfile")) {
+    _.promise.make({})
+        .then(fs.tmpfile)
+        .then(sd => console.log("+", "ok", sd.path))
+        .catch(error => console.log("#", error))
+}
+
+if (action("tmpfile.extension")) {
+    _.promise.make({})
+        .then(fs.tmpfile.extension(".png"))
+        .then(sd => console.log("+", "ok", sd.path))
+        .catch(error => console.log("#", error))
+}
