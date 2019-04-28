@@ -65,6 +65,7 @@ describe("write", function() {
         describe("bad", function() {
         })
         describe("good", function() {
+            /*
             it("works - 0 args", function(done) {
                 const MESSAGE = "Hello World\n你好，世界\nこんにちは世界\n";
                 const PATH = path.join(TEST_FOLDER, "out.txt");
@@ -96,6 +97,26 @@ describe("write", function() {
                     .then(fs.mkdir.parent)
                     .then(fs.remove)
                     .then(fs.write.p(PATH))
+                    .then(sd => {
+                        const result = fs.fs.readFileSync(PATH, "utf-8")
+                        
+                        assert.deepEqual(result, MESSAGE);
+
+                        done();
+                    })
+                    .catch(done)
+            })
+            */
+            it("works - missing path", function(done) {
+                const MESSAGE = "Hello World\n你好，世界\nこんにちは世界\n";
+                const PATH = path.join(TEST_FOLDER, "out.txt");
+
+                _.promise.make({
+                    path: PATH,
+                })
+                    .then(fs.mkdir.parent)
+                    .then(fs.remove)
+                    .then(fs.write.p(null, MESSAGE))
                     .then(sd => {
                         const result = fs.fs.readFileSync(PATH, "utf-8")
                         

@@ -132,3 +132,15 @@ if (action("tmpfile.extension")) {
         .then(sd => console.log("+", "ok", sd.path))
         .catch(error => console.log("#", error))
 }
+
+if (action("append")) {
+    _.promise.make({
+        path: "delete-me/append.txt",
+    })
+        .then(fs.mkdir.parent)
+        .then(fs.append.line(null, "A"))
+        .then(fs.append.line(null, "B"))
+        .then(fs.append.line(null, "C"))
+        .then(sd => console.log("+", "ok", sd.path))
+        .catch(error => console.log("#", error))
+}
