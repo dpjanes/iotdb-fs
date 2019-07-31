@@ -5,7 +5,7 @@
     }, 
     "dependencies": {
         "iotdb-errors": "~3.1.8", 
-        "iotdb-helpers": "~3.3.10", 
+        "iotdb-helpers": "~3.3.11", 
         "mime": "~2.4.4"
     }, 
     "description": "Pipe-oriented FS operations", 
@@ -22,5 +22,5 @@
         "cover": "nyc --reporter=html mocha --recursive", 
         "test": "mocha --recursive --bail"
     }, 
-    "version": "1.0.38"
+    "version": "1.0.39"
 }
