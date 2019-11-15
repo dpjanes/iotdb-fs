@@ -368,4 +368,170 @@ describe("read", function() {
             })
         })
     })
+    describe("read.yaml", function() {
+        describe("bad", function() {
+            it("file does not exist", function(done) {
+                _.promise({
+                    path: "data/does-not-exist",
+                })
+                    .then(fs.read.yaml)
+                    .then(_util.auto_fail(done))
+                    .catch(_util.ok_error(done))
+            })
+            it("file has multi YAML", function(done) {
+                _.promise({
+                    path: "data/multi.yaml",
+                })
+                    .then(fs.read.yaml)
+                    .then(_util.auto_fail(done))
+                    .catch(_util.ok_error(done))
+            })
+        })
+        describe("otherwise", function() {
+            it("file does not exist", function(done) {
+                _.promise({
+                    path: "data/does-not-exist",
+                    otherwise: 123,
+                })
+                    .then(fs.read.yaml)
+                    .make(sd => {
+                        assert.deepEqual(sd.json, 123)
+                    })
+                    .end(done)
+            })
+            it("file has multi YAML", function(done) {
+                _.promise({
+                    path: "data/multi.yaml",
+                    otherwise: 123,
+                })
+                    .then(fs.read.yaml)
+                    .make(sd => {
+                        assert.deepEqual(sd.json, 123)
+                    })
+                    .end(done)
+            })
+        })
+        describe("good", function() {
+            it("works with json", function(done) {
+                _.promise({
+                    path: "data/c.json",
+                })
+                    .then(fs.read.yaml)
+                    .then(sd => {
+                        const got = sd.json
+                        const want = [ { "a": 1, "note": "in data" }, 2, 3 ]
+
+                        assert.deepEqual(got, want)
+                        assert.ok(!sd.document);
+                        assert.ok(!sd.document_media_type);
+                        assert.ok(!sd.document_encoding);
+
+                        done();
+                    })
+                    .catch(done)
+            })
+            it("works with yaml", function(done) {
+                _.promise({
+                    path: "data/single.yaml",
+                })
+                    .then(fs.read.yaml)
+                    .then(sd => {
+                        const got = sd.json
+                        const want = { a: 1, b: 2 }
+
+                        assert.deepStrictEqual(got, want)
+                        assert.ok(!sd.document);
+                        assert.ok(!sd.document_media_type);
+                        assert.ok(!sd.document_encoding);
+
+                        done();
+                    })
+                    .catch(done)
+            })
+        })
+    })
+    describe("read.yaml", function() {
+        describe("bad", function() {
+            it("file does not exist", function(done) {
+                _.promise({
+                    path: "data/does-not-exist",
+                })
+                    .then(fs.read.yamls)
+                    .then(_util.auto_fail(done))
+                    .catch(_util.ok_error(done))
+            })
+        })
+        describe("otherwise", function() {
+            it("file does not exist", function(done) {
+                _.promise({
+                    path: "data/does-not-exist",
+                    otherwise: 123,
+                })
+                    .then(fs.read.yamls)
+                    .make(sd => {
+                        assert.deepEqual(sd.json, 123)
+                    })
+                    .end(done)
+            })
+        })
+        describe("good", function() {
+            it("works with json", function(done) {
+                _.promise({
+                    path: "data/c.json",
+                })
+                    .then(fs.read.yamls)
+                    .then(sd => {
+                        const got = sd.json
+                        const want = [[ { "a": 1, "note": "in data" }, 2, 3 ]]
+
+                        assert.strictEqual(sd.json, sd.jsons)
+                        assert.deepEqual(got, want)
+                        assert.ok(!sd.document);
+                        assert.ok(!sd.document_media_type);
+                        assert.ok(!sd.document_encoding);
+
+                        done();
+                    })
+                    .catch(done)
+            })
+            it("works with yaml", function(done) {
+                _.promise({
+                    path: "data/single.yaml",
+                })
+                    .then(fs.read.yamls)
+                    .then(sd => {
+                        const got = sd.json
+                        const want = [ { a: 1, b: 2 } ]
+
+                        assert.strictEqual(sd.json, sd.jsons)
+                        assert.deepStrictEqual(got, want)
+                        assert.ok(!sd.document);
+                        assert.ok(!sd.document_media_type);
+                        assert.ok(!sd.document_encoding);
+
+                        done();
+                    })
+                    .catch(done)
+            })
+            it("file has multi YAML", function(done) {
+                _.promise({
+                    path: "data/multi.yaml",
+                })
+                    .then(fs.read.yamls)
+                    .then(sd => {
+                        const got = sd.json
+                        const want = [{"a":1,"b":2},{"c":[{"e":1},{"f":"a","g":"hello"}]}]
+
+                        assert.strictEqual(sd.json, sd.jsons)
+                        assert.deepStrictEqual(got, want)
+                        assert.ok(!sd.document);
+                        assert.ok(!sd.document_media_type);
+                        assert.ok(!sd.document_encoding);
+
+                        done();
+                    })
+                    .catch(done)
+            })
+        })
+    })
 })

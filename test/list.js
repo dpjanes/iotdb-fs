@@ -66,7 +66,7 @@ describe("list", function() {
                     .then(fs.list)
                     .then(sd => {
                         const got = sd.paths.sort()
-                        const expected = [ "data/a.json", "data/b.json", "data/c.json", "data/c.txt", "data/d.yaml", "data/subfolder" ];
+                        const expected = [ "data/a.json", "data/b.json", "data/c.json", "data/c.txt", "data/multi.yaml", "data/single.yaml", "data/subfolder" ];
 
                         assert.deepEqual(got, expected)
 
@@ -119,7 +119,7 @@ describe("list", function() {
                     .then(fs.list.recursive)
                     .then(sd => {
                         const got = sd.paths.sort()
-                        const expected = [ "data/a.json", "data/b.json", "data/c.json", "data/c.txt", "data/d.yaml", "data/subfolder", "data/subfolder/a.json"  ];
+                        const expected = [ "data/a.json", "data/b.json", "data/c.json", "data/c.txt", "data/multi.yaml", "data/single.yaml", "data/subfolder", "data/subfolder/a.json"  ];
 
                         assert.deepEqual(got, expected)
 
@@ -168,7 +168,7 @@ describe("list", function() {
                     .then(fs.list.recursive)
                     .then(sd => {
                         const got = sd.paths.sort()
-                        const expected = [ "data/a.json", "data/b.json", "data/c.json", "data/c.txt", "data/d.yaml", "data/subfolder", ];
+                        const expected = [ "data/a.json", "data/b.json", "data/c.json", "data/c.txt", "data/multi.yaml", "data/single.yaml", "data/subfolder", ];
 
                         assert.deepEqual(got, expected)
 
@@ -184,7 +184,7 @@ describe("list", function() {
                     .then(fs.list.recursive)
                     .then(sd => {
                         const got = sd.paths.sort()
-                        const expected = [ "data/a.json", "data/b.json", "data/c.json", "data/c.txt", "data/d.yaml", "data/subfolder", "data/subfolder/a.json" ];
+                        const expected = [ "data/a.json", "data/b.json", "data/c.json", "data/c.txt", "data/multi.yaml", "data/single.yaml", "data/subfolder", "data/subfolder/a.json" ];
 
                         assert.deepEqual(got, expected)
 
@@ -200,7 +200,7 @@ describe("list", function() {
                     .then(fs.list.recursive)
                     .then(sd => {
                         const got = sd.paths.sort()
-                        const expected = [ "data/a.json", "data/b.json", "data/c.json", "data/c.txt", "data/d.yaml", "data/subfolder", ];
+                        const expected = [ "data/a.json", "data/b.json", "data/c.json", "data/c.txt", "data/multi.yaml", "data/single.yaml", "data/subfolder", ];
 
                         assert.deepEqual(got, expected)
 
