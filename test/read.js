@@ -20,13 +20,13 @@
  *  limitations under the License.
  */
 
-"use strict";
+"use strict"
 
-const _ = require("iotdb-helpers");
-const fs = require("..");
+const _ = require("iotdb-helpers")
+const fs = require("..")
 
-const assert = require("assert");
-
+const assert = require("assert")
+const _util = require("./_util")
 
 process.chdir(__dirname);
 
@@ -34,21 +34,17 @@ describe("read", function() {
     describe("core", function() {
         describe("bad", function() {
             it("file does not exist", function(done) {
-                _.promise.make({
+                _.promise({
                     path: "data/does-not-exist",
                 })
                     .then(fs.read)
-                    .then(sd => {
-                        done(new Error("did not expect to get here"))
-                    })
-                    .catch(error => {
-                        done()
-                    })
+                    .then(_util.auto_fail(done))
+                    .catch(_util.ok_error(done))
             })
         })
         describe("good", function() {
             it("using document_encoding latin1", function(done) {
-                _.promise.make({
+                _.promise({
                     path: "data/c.txt",
                     document_encoding: "latin1",
                 })
@@ -67,7 +63,7 @@ describe("read", function() {
                     .catch(done)
             })
             it("using document_encoding utf-8", function(done) {
-                _.promise.make({
+                _.promise({
                     path: "data/c.txt",
                     document_encoding: "utf-8",
                 })
@@ -85,7 +81,7 @@ describe("read", function() {
                     .catch(done)
             })
             it("otherwise", function(done) {
-                _.promise.make({
+                _.promise({
                     path: "data/does-not-exist",
                     otherwise: 123, 
                 })
@@ -104,21 +100,17 @@ describe("read", function() {
     describe("read.buffer", function() {
         describe("bad", function() {
             it("file does not exist", function(done) {
-                _.promise.make({
+                _.promise({
                     path: "data/does-not-exist",
                 })
                     .then(fs.read.buffer)
-                    .then(sd => {
-                        done(new Error("did not expect to get here"))
-                    })
-                    .catch(error => {
-                        done()
-                    })
+                    .then(_util.auto_fail(done))
+                    .catch(_util.ok_error(done))
             })
         })
         describe("good", function() {
             it("works", function(done) {
-                _.promise.make({
+                _.promise({
                     path: "data/c.txt",
                 })
                     .then(fs.read.buffer)
@@ -136,7 +128,7 @@ describe("read", function() {
                     .catch(done)
             })
             it("otherwise", function(done) {
-                _.promise.make({
+                _.promise({
                     path: "data/does-not-exist",
                     otherwise: 123, 
                 })
@@ -155,21 +147,17 @@ describe("read", function() {
     describe("read.utf8", function() {
         describe("bad", function() {
             it("file does not exist", function(done) {
-                _.promise.make({
+                _.promise({
                     path: "data/does-not-exist",
                 })
                     .then(fs.read.utf8)
-                    .then(sd => {
-                        done(new Error("did not expect to get here"))
-                    })
-                    .catch(error => {
-                        done()
-                    })
+                    .then(_util.auto_fail(done))
+                    .catch(_util.ok_error(done))
             })
         })
         describe("good", function() {
             it("works", function(done) {
-                _.promise.make({
+                _.promise({
                     path: "data/c.txt",
                 })
                     .then(fs.read.utf8)
@@ -186,7 +174,7 @@ describe("read", function() {
                     .catch(done)
             })
             it("otherwise", function(done) {
-                _.promise.make({
+                _.promise({
                     path: "data/does-not-exist",
                     otherwise: 123, 
                 })
@@ -205,21 +193,17 @@ describe("read", function() {
     describe("read.json", function() {
         describe("bad", function() {
             it("file does not exist", function(done) {
-                _.promise.make({
+                _.promise({
                     path: "data/does-not-exist",
                 })
                     .then(fs.read.json)
-                    .then(sd => {
-                        done(new Error("did not expect to get here"))
-                    })
-                    .catch(error => {
-                        done()
-                    })
+                    .then(_util.auto_fail(done))
+                    .catch(_util.ok_error(done))
             })
         })
         describe("good", function() {
             it("works", function(done) {
-                _.promise.make({
+                _.promise({
                     path: "data/a.json",
                 })
                     .then(fs.read.json)
@@ -236,7 +220,7 @@ describe("read", function() {
                     .catch(done)
             })
             it("otherwise", function(done) {
-                _.promise.make({
+                _.promise({
                     path: "data/does-not-exist",
                     otherwise: 123, 
                 })
@@ -270,7 +254,7 @@ describe("read", function() {
         })
         describe("good", function() {
             it("works", function(done) {
-                _.promise.make({})
+                _.promise({})
                     .then(fs.read.stdin)
                     .then(sd => {
                         const expected_document = "Hello World\n你好，世界\nこんにちは世界\n";
@@ -283,6 +267,63 @@ describe("read", function() {
                     })
                     .catch(done)
             })
+        })
+    })
+    describe("read.jsons", function() {
+        describe("bad", function() {
+            it("file does not exist", function(done) {
+                _.promise({
+                    path: "data/does-not-exist",
+                })
+                    .then(fs.read.jsons)
+                    .then(_util.auto_fail(done))
+                    .catch(_util.ok_error(done))
+            })
+            it("file is not an array", function(done) {
+                _.promise({
+                    path: "data/a.json",
+                })
+                    .then(fs.read.jsons)
+                    .then(_util.auto_fail(done))
+                    .catch(_util.ok_error(done))
+            })
+        })
+        describe("good", function() {
+            it("works", function(done) {
+                _.promise({
+                    path: "data/c.json",
+                })
+                    .then(fs.read.jsons)
+                    .then(sd => {
+                        const got = sd.jsons
+                        const want = [ { "a": 1, "note": "in data" }, 2, 3 ]
+
+                        assert.deepEqual(got, want)
+                        assert.ok(!sd.document);
+                        assert.ok(!sd.document_media_type);
+                        assert.ok(!sd.document_encoding);
+
+                        done();
+                    })
+                    .catch(done)
+            })
+            /*
+            it("otherwise", function(done) {
+                _.promise({
+                    path: "data/does-not-exist",
+                    otherwise: 123, 
+                })
+                    .then(fs.read.json)
+                    .then(sd => {
+                        const expected_json = 123;
+
+                        assert.deepEqual(sd.json, expected_json);
+
+                        done();
+                    })
+                    .catch(done)
+            })
+            */
         })
     })
 })
