@@ -200,6 +200,14 @@ describe("read", function() {
                     .then(_util.auto_fail(done))
                     .catch(_util.ok_error(done))
             })
+            it("file has bad JSON", function(done) {
+                _.promise({
+                    path: "data/c.txt",
+                })
+                    .then(fs.read.json)
+                    .then(_util.auto_fail(done))
+                    .catch(_util.ok_error(done))
+            })
         })
         describe("good", function() {
             it("works", function(done) {
@@ -233,6 +241,20 @@ describe("read", function() {
                         done();
                     })
                     .catch(done)
+            })
+            it("otherwise - file contains invalid JSON", function(done) {
+                _.promise({
+                    path: "data/c.txt",
+                    otherwise: 123, 
+                })
+                    .then(fs.read.json)
+                    .then(sd => {
+                        const got = 123
+                        const want = 123;
+
+                        assert.deepEqual(got, want)
+                    })
+                    .end(done)
             })
         })
     })
@@ -287,6 +309,14 @@ describe("read", function() {
                     .then(_util.auto_fail(done))
                     .catch(_util.ok_error(done))
             })
+            it("file has bad JSON", function(done) {
+                _.promise({
+                    path: "data/c.txt",
+                })
+                    .then(fs.read.json)
+                    .then(_util.auto_fail(done))
+                    .catch(_util.ok_error(done))
+            })
         })
         describe("good", function() {
             it("works", function(done) {
@@ -307,13 +337,12 @@ describe("read", function() {
                     })
                     .catch(done)
             })
-            /*
             it("otherwise", function(done) {
                 _.promise({
                     path: "data/does-not-exist",
                     otherwise: 123, 
                 })
-                    .then(fs.read.json)
+                    .then(fs.read.jsons)
                     .then(sd => {
                         const expected_json = 123;
 
@@ -323,7 +352,20 @@ describe("read", function() {
                     })
                     .catch(done)
             })
-            */
+            it("otherwise - file contains invalid JSON", function(done) {
+                _.promise({
+                    path: "data/c.txt",
+                    otherwise: 123, 
+                })
+                    .then(fs.read.jsons)
+                    .then(sd => {
+                        const got = 123
+                        const want = 123;
+
+                        assert.deepEqual(got, want)
+                    })
+                    .end(done)
+            })
         })
     })
 })
