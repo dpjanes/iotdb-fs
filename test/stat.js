@@ -20,20 +20,28 @@
  *  limitations under the License.
  */
 
-"use strict";
+"use strict"
 
-const _ = require("iotdb-helpers");
-const fs = require("..");
+const _ = require("iotdb-helpers")
+const fs = require("..")
 
-const assert = require("assert");
+const assert = require("assert")
+const _util = require("./_util")
 
-process.chdir(__dirname);
+process.chdir(__dirname)
 
 /*
- *  NEED tests for actual symbolic links, and file no permissions
  */
 describe("stat", function() {
     describe("stat", function() {
+        it("file no permissions", function(done) {
+            _.promise({
+                path: "/var/audit/xxx",
+            })
+                .then(fs.stat)
+                .then(_util.auto_fail(done))
+                .catch(_util.ok_error(done))
+        })
         it("file does not exist", function(done) {
             _.promise({
                 path: "data/does-not-exist",
@@ -150,6 +158,28 @@ describe("stat", function() {
                 .make(sd => {
                     assert.ok(sd.exists)
                     assert.ok(sd.stats)
+                })
+                .end(done)
+        })
+        it("symlink exists but file doesn't", function(done) {
+            _.promise({
+            })
+                .then(fs.stat.symbolic_link.p("data-2/doesnotexist-link.yaml"))
+                .make(sd => {
+                    assert.ok(sd.exists)
+                    assert.ok(sd.stats)
+                })
+                .end(done)
+        })
+        it("symlink", function(done) {
+            _.promise({
+            })
+                .then(fs.stat.symbolic_link.p("data-2/a.yaml"))
+                .add("stats:real")
+                .then(fs.stat.symbolic_link.p("data-2/a-link.yaml"))
+                .add("stats:link")
+                .make(sd => {
+                    assert.ok(sd.real.mtime !== sd.link.mtime)
                 })
                 .end(done)
         })
