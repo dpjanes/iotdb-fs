@@ -29,35 +29,36 @@ const assert = require("assert");
 
 process.chdir(__dirname);
 
+/*
+ *  NEED tests for actual symbolic links, and file no permissions
+ */
 describe("stat", function() {
     describe("stat", function() {
         it("file does not exist", function(done) {
-            _.promise.make({
+            _.promise({
                 path: "data/does-not-exist",
             })
                 .then(fs.stat)
-                .then(sd => {
+                .make(sd => {
                     assert.ok(!sd.exists)
                     assert.ok(!sd.stats)
-                    done()
                 })
-                .catch(done)
+                .end(done)
         })
         it("file exists", function(done) {
-            _.promise.make({
+            _.promise({
                 path: "data/c.txt",
             })
                 .then(fs.stat)
-                .then(sd => {
+                .make(sd => {
                     assert.ok(sd.exists)
                     assert.ok(sd.stats)
                     assert.ok(sd.stats.isFile())
-                    done()
                 })
-                .catch(done)
+                .end(done)
         })
         it("directory exists", function(done) {
-            _.promise.make({
+            _.promise({
                 path: "data",
             })
                 .then(fs.stat)
@@ -65,30 +66,28 @@ describe("stat", function() {
                     assert.ok(sd.exists)
                     assert.ok(sd.stats)
                     assert.ok(sd.stats.isDirectory())
-                    done()
                 })
-                .catch(done)
+                .end(done)
         })
     })
     describe("symbolic link", function() {
         it("file does not exist", function(done) {
-            _.promise.make({
+            _.promise({
                 path: "data/does-not-exist",
             })
                 .then(fs.stat.symbolic_link)
-                .then(sd => {
+                .make(sd => {
                     assert.ok(!sd.exists)
                     assert.ok(!sd.stats)
-                    done()
                 })
-                .catch(done)
+                .end(done)
         })
         it("file exists", function(done) {
-            _.promise.make({
+            _.promise({
                 path: "data/c.txt",
             })
                 .then(fs.stat.symbolic_link)
-                .then(sd => {
+                .make(sd => {
                     assert.ok(sd.exists)
                     assert.ok(sd.stats)
                     assert.ok(sd.stats.isFile())
@@ -97,17 +96,62 @@ describe("stat", function() {
                 .catch(done)
         })
         it("directory exists", function(done) {
-            _.promise.make({
+            _.promise({
                 path: "data",
             })
                 .then(fs.stat.symbolic_link)
-                .then(sd => {
+                .make(sd => {
                     assert.ok(sd.exists)
                     assert.ok(sd.stats)
                     assert.ok(sd.stats.isDirectory())
-                    done()
                 })
-                .catch(done)
+                .end(done)
+        })
+    })
+    describe("stat.p", function() {
+        it("file exists", function(done) {
+            _.promise({
+            })
+                .then(fs.stat.p("data/c.txt"))
+                .make(sd => {
+                    assert.ok(sd.exists)
+                    assert.ok(sd.stats)
+                })
+                .end(done)
+        })
+        it("file exists - fallthrough", function(done) {
+            _.promise({
+                path: "data/c.txt",
+            })
+                .then(fs.stat.p())
+                .make(sd => {
+                    assert.ok(sd.exists)
+                    assert.ok(sd.stats)
+                })
+                .end(done)
+        })
+    })
+    describe("stat.symbolic_link.p", function() {
+        it("file exists", function(done) {
+            _.promise({
+            })
+                .then(fs.stat.symbolic_link.p("data/c.txt"))
+                .make(sd => {
+                    assert.ok(sd.exists)
+                    assert.ok(sd.stats)
+                })
+                .end(done)
+        })
+        it("file exists - fallthrough", function(done) {
+            _.promise({
+                path: "data/c.txt",
+            })
+                .then(fs.stat.symbolic_link.p())
+                .make(sd => {
+                    assert.ok(sd.exists)
+                    assert.ok(sd.stats)
+                })
+                .end(done)
         })
     })
 })
