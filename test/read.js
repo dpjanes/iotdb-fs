@@ -460,11 +460,30 @@ describe("read", function() {
                     .then(_util.auto_fail(done))
                     .catch(_util.ok_error(done))
             })
+            it("invalid", function(done) {
+                _.promise({
+                    path: "data-2/invalid.yaml",
+                })
+                    .then(fs.read.yamls)
+                    .then(_util.auto_fail(done))
+                    .catch(_util.ok_error(done))
+            })
         })
         describe("otherwise", function() {
             it("file does not exist", function(done) {
                 _.promise({
                     path: "data/does-not-exist",
+                    otherwise: 123,
+                })
+                    .then(fs.read.yamls)
+                    .make(sd => {
+                        assert.deepEqual(sd.json, 123)
+                    })
+                    .end(done)
+            })
+            it("invalid", function(done) {
+                _.promise({
+                    path: "data-2/invalid.yaml",
                     otherwise: 123,
                 })
                     .then(fs.read.yamls)
