@@ -31,7 +31,7 @@ const _util = require("./_util")
 process.chdir(__dirname);
 
 describe("read", function() {
-    describe("core", function() {
+    describe("read", function() {
         describe("bad", function() {
             it("file does not exist", function(done) {
                 _.promise({
@@ -546,6 +546,191 @@ describe("read", function() {
                         assert.ok(!sd.document);
                         assert.ok(!sd.document_media_type);
                         assert.ok(!sd.document_encoding);
+
+                        done();
+                    })
+                    .catch(done)
+            })
+        })
+    })
+    describe("read.p", function() {
+        describe("bad", function() {
+            it("file does not exist", function(done) {
+                _.promise({
+                    // path: "data/does-not-exist",
+                })
+                    .then(fs.read.p("data/does-not-exist"))
+                    .then(_util.auto_fail(done))
+                    .catch(_util.ok_error(done))
+            })
+        })
+        describe("good", function() {
+            it("using document_encoding latin1", function(done) {
+                _.promise({
+                    // path: "data/c.txt",
+                    // document_encoding: "latin1",
+                })
+                    .then(fs.read.p("data/c.txt", "latin1"))
+                    .then(sd => {
+                        const expected_document = "Hello World\n你好，世界\nこんにちは世界\n";
+                        const expected_document_media_type = "text/plain";
+
+                        assert.ok(sd.document !== expected_document);
+                        assert.ok(sd.document.startsWith("Hello World\n"));
+                        assert.ok(!sd.document_encoding);
+                        assert.deepEqual(sd.document_media_type, expected_document_media_type);
+
+                        done();
+                    })
+                    .catch(done)
+            })
+            it("using document_encoding utf-8", function(done) {
+                _.promise({
+                    // path: "data/c.txt",
+                    // document_encoding: "utf-8",
+                })
+                    .then(fs.read.p("data/c.txt", "utf-8"))
+                    .then(sd => {
+                        const expected_document = "Hello World\n你好，世界\nこんにちは世界\n";
+                        const expected_document_media_type = "text/plain";
+
+                        assert.deepEqual(sd.document, expected_document);
+                        assert.deepEqual(sd.document_media_type, expected_document_media_type);
+                        assert.ok(!sd.document_encoding);
+
+                        done();
+                    })
+                    .catch(done)
+            })
+            it("otherwise", function(done) {
+                _.promise({
+                    // path: "data/does-not-exist",
+                    // otherwise: 123, 
+                })
+                    .then(fs.read.p("data/does-not-exist", null, 123))
+                    .then(sd => {
+                        const expected_document = 123;
+
+                        assert.deepEqual(sd.document, expected_document);
+
+                        done();
+                    })
+                    .catch(done)
+            })
+            it("fall throughs", function(done) {
+                _.promise({
+                    path: "data/c.txt",
+                    document_encoding: "utf-8",
+                    otherwise: null,
+                })
+                    .then(fs.read.p())
+                    .then(sd => {
+                        const expected_document = "Hello World\n你好，世界\nこんにちは世界\n";
+                        const expected_document_media_type = "text/plain";
+
+                        assert.deepEqual(sd.document, expected_document);
+                        assert.deepEqual(sd.document_media_type, expected_document_media_type);
+                        assert.deepEqual(sd.document_name, "c.txt");
+                        assert.ok(!sd.document_encoding);
+
+                        done();
+                    })
+                    .catch(done)
+            })
+            it("fall throughs - otherwise", function(done) {
+                _.promise({
+                    path: "data/does-not-exist",
+                    otherwise: 123, 
+                })
+                    .then(fs.read.p())
+                    .then(sd => {
+                        const expected_document = 123;
+
+                        assert.deepEqual(sd.document, expected_document);
+                        assert.deepEqual(sd.document_name, "does-not-exist");
+
+                        done();
+                    })
+                    .catch(done)
+            })
+        })
+    })
+    describe("read.json.p", function() {
+        describe("bad", function() {
+            it("file does not exist", function(done) {
+                _.promise({
+                    // path: "data/does-not-exist",
+                })
+                    .then(fs.read.json.p("data/does-not-exist"))
+                    .then(_util.auto_fail(done))
+                    .catch(_util.ok_error(done))
+            })
+            it("file has bad JSON", function(done) {
+                _.promise({
+                    // path: "data/c.txt",
+                })
+                    .then(fs.read.json.p("data/c.txt"))
+                    .then(_util.auto_fail(done))
+                    .catch(_util.ok_error(done))
+            })
+        })
+        describe("good", function() {
+            it("works", function(done) {
+                _.promise({
+                    // path: "data/a.json",
+                })
+                    .then(fs.read.json.p("data/a.json"))
+                    .then(sd => {
+                        const expected_json = { a: 0, b: 1, note: 'in data' }
+
+                        assert.deepEqual(sd.json, expected_json);
+                        assert.ok(!sd.document);
+                        assert.ok(!sd.document_media_type);
+                        assert.ok(!sd.document_encoding);
+
+                        done();
+                    })
+                    .catch(done)
+            })
+            it("otherwise", function(done) {
+                _.promise({
+                    // path: "data/does-not-exist",
+                    // otherwise: 123, 
+                })
+                    .then(fs.read.json.p("data/does-not-exist", 123))
+                    .then(sd => {
+                        const expected_json = 123;
+
+                        assert.deepEqual(sd.json, expected_json);
+
+                        done();
+                    })
+                    .catch(done)
+            })
+            it("otherwise - file contains invalid JSON", function(done) {
+                _.promise({
+                    // path: "data/c.txt",
+                    // otherwise: 123, 
+                })
+                    .then(fs.read.json.p("data/c.txt", 123))
+                    .then(sd => {
+                        const got = 123
+                        const want = 123;
+
+                        assert.deepEqual(got, want)
+                    })
+                    .end(done)
+            })
+            it("fallthrough - otherwise", function(done) {
+                _.promise({
+                    path: "data/does-not-exist",
+                    otherwise: 123, 
+                })
+                    .then(fs.read.json.p())
+                    .then(sd => {
+                        const expected_json = 123;
+
+                        assert.deepEqual(sd.json, expected_json);
 
                         done();
                     })
