@@ -66,12 +66,39 @@ describe("read.json.magic", function() {
                     })
                     .catch(done)
             })
+            it("works paramaterized", function(done) {
+                _.promise({
+                })
+                    .then(fs.read.json.magic.p("data/a.json"))
+                    .then(sd => {
+                        const expected_json = { a: 0, b: 1, note: 'in data' }
+
+                        assert.deepEqual(sd.json, expected_json);
+                        assert.ok(!sd.document);
+
+                        done();
+                    })
+                    .catch(done)
+            })
             it("otherwise", function(done) {
                 _.promise({
                     path: "data/does-not-exist",
                     otherwise: 123, 
                 })
                     .then(fs.read.json.magic)
+                    .then(sd => {
+                        const expected_json = 123;
+
+                        assert.deepEqual(sd.json, expected_json);
+
+                        done();
+                    })
+                    .catch(done)
+            })
+            it("otherwise parameterized", function(done) {
+                _.promise({
+                })
+                    .then(fs.read.json.magic.p("data/does-not-exist", 123))
                     .then(sd => {
                         const expected_json = 123;
 
