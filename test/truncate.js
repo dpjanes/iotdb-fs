@@ -27,63 +27,101 @@ const fs = require("..")
 
 const assert = require("assert")
 const path = require("path")
+const _util = require("./_util")
 
 process.chdir(__dirname)
 
 describe("truncate", function() {
     const TEST_FOLDER = "tmp"
 
-    describe("core", function() {
-        describe("bad", function() {
+    const MESSAGE = "Hello World\n你好，世界\nこんにちは世界\n"
+    const PATH = path.join(TEST_FOLDER, "out.txt")
+
+    describe("bad", function() {
+        it("path required", function(done) {
+            _.promise.make({
+                path: PATH,
+                document: MESSAGE,
+            })
+                .then(fs.mkdir.parent)
+                .then(fs.remove)
+                .then(fs.write.utf8)
+                .then(fs.read.utf8)
+                .make(sd => {
+                    assert.strictEqual(sd.document.length, MESSAGE.length)
+                })
+
+                .make(sd => {
+                    delete sd.path
+                })
+                .then(fs.truncate)
+                .then(_util.auto_fail(done))
+                .catch(_util.ok_error(done))
         })
-        describe("good", function() {
-            it("works", function(done) {
-                const MESSAGE = "Hello World\n你好，世界\nこんにちは世界\n"
-                const PATH = path.join(TEST_FOLDER, "out.txt")
-
-                _.promise.make({
-                    path: PATH,
-                    document: MESSAGE,
-                })
-                    .then(fs.mkdir.parent)
-                    .then(fs.remove)
-                    .then(fs.write.utf8)
-                    .then(fs.read.utf8)
-                    .make(sd => {
-                        assert.strictEqual(sd.document.length, MESSAGE.length)
-                    })
-
-                    .then(fs.truncate)
-                    .then(fs.read.utf8)
-                    .make(sd => {
-                        assert.strictEqual(sd.document.length, 0)
-                    })
-                    .end(done)
+        it("fs$length must be integer", function(done) {
+            _.promise.make({
+                path: PATH,
+                document: MESSAGE,
             })
-            it("works with length", function(done) {
-                const MESSAGE = "Hello World\n你好，世界\nこんにちは世界\n"
-                const PATH = path.join(TEST_FOLDER, "out.txt")
-
-                _.promise.make({
-                    path: PATH,
-                    document: MESSAGE,
+                .then(fs.mkdir.parent)
+                .then(fs.remove)
+                .then(fs.write.utf8)
+                .then(fs.read.utf8)
+                .make(sd => {
+                    assert.strictEqual(sd.document.length, MESSAGE.length)
                 })
-                    .then(fs.mkdir.parent)
-                    .then(fs.remove)
-                    .then(fs.write.utf8)
-                    .then(fs.read.utf8)
-                    .make(sd => {
-                        assert.strictEqual(sd.document.length, MESSAGE.length)
-                    })
 
-                    .add("fs$length", 10)
-                    .then(fs.truncate)
-                    .then(fs.read.utf8)
-                    .make(sd => {
-                        assert.strictEqual(sd.document.length, 10)
-                    })
-                    .end(done)
+                .add("fs$length", "10")
+                .then(fs.truncate)
+                .then(_util.auto_fail(done))
+                .catch(_util.ok_error(done))
+        })
+    })
+
+    describe("good", function() {
+        it("works", function(done) {
+            _.promise.make({
+                path: PATH,
+                document: MESSAGE,
             })
+                .then(fs.mkdir.parent)
+                .then(fs.remove)
+                .then(fs.write.utf8)
+                .then(fs.read.utf8)
+                .make(sd => {
+                    assert.strictEqual(sd.document.length, MESSAGE.length)
+                })
+
+                .then(fs.truncate)
+                .then(fs.read.utf8)
+                .make(sd => {
+                    assert.strictEqual(sd.document.length, 0)
+                })
+                .end(done)
+        })
+        it("works with length", function(done) {
+            const MESSAGE = "Hello World\n你好，世界\nこんにちは世界\n"
+            const PATH = path.join(TEST_FOLDER, "out.txt")
+
+            _.promise.make({
+                path: PATH,
+                document: MESSAGE,
+            })
+                .then(fs.mkdir.parent)
+                .then(fs.remove)
+                .then(fs.write.utf8)
+                .then(fs.read.utf8)
+                .make(sd => {
+                    assert.strictEqual(sd.document.length, MESSAGE.length)
+                })
+
+                .add("fs$length", 10)
+                .then(fs.truncate)
+                .then(fs.read.utf8)
+                .make(sd => {
+                    assert.strictEqual(sd.document.length, 10)
+                })
+                .end(done)
         })
     })
 })
