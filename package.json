@@ -5,10 +5,10 @@
     }, 
     "dependencies": {
         "iotdb-errors": "~3.1.8", 
-        "iotdb-helpers": "~3.3.11", 
+        "iotdb-helpers": "~3.4.1", 
         "mime": "~2.4.4"
     }, 
-    "description": "Pipe-oriented FS operations", 
+    "description": "POP file system operations", 
     "homepage": "https://github.com/dpjanes/node-iotdb", 
     "license": "Apache-2.0", 
     "main": "index.js", 
@@ -22,5 +22,5 @@
         "cover": "nyc --reporter=html mocha --recursive", 
         "test": "mocha --recursive --bail"
     }, 
-    "version": "1.0.39"
+    "version": "1.1.1"
 }
