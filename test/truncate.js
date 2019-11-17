@@ -100,9 +100,6 @@ describe("truncate", function() {
                 .end(done)
         })
         it("works with length", function(done) {
-            const MESSAGE = "Hello World\n你好，世界\nこんにちは世界\n"
-            const PATH = path.join(TEST_FOLDER, "out.txt")
-
             _.promise.make({
                 path: PATH,
                 document: MESSAGE,
@@ -117,6 +114,54 @@ describe("truncate", function() {
 
                 .add("fs$length", 10)
                 .then(fs.truncate)
+                .then(fs.read.utf8)
+                .make(sd => {
+                    assert.strictEqual(sd.document.length, 10)
+                })
+                .end(done)
+        })
+    })
+    describe("parameterized", function() {
+        if (1) it("works", function(done) {
+            _.promise.make({
+                path: PATH,
+                document: MESSAGE,
+            })
+                .then(fs.mkdir.parent)
+                .then(fs.remove)
+                .then(fs.write.utf8)
+                .then(fs.read.utf8)
+                .make(sd => {
+                    assert.strictEqual(sd.document.length, MESSAGE.length)
+                })
+
+                .make(sd => {
+                    delete sd.path
+                })
+                .then(fs.truncate.p(PATH))
+
+                .then(fs.read.p(PATH, "utf8"))
+                .make(sd => {
+                    assert.strictEqual(sd.document.length, 0)
+                })
+                .end(done)
+        })
+        if (0) it("works with length", function(done) {
+            _.promise.make({
+                path: PATH,
+                document: MESSAGE,
+            })
+                .then(fs.mkdir.parent)
+                .then(fs.remove)
+                .then(fs.write.utf8)
+                .then(fs.read.utf8)
+                .make(sd => {
+                    assert.strictEqual(sd.document.length, MESSAGE.length)
+                })
+
+                .then(fs.truncate.p(null, 10))
+
+                .then(fs.read.p(PATH, "utf8"))
                 .then(fs.read.utf8)
                 .make(sd => {
                     assert.strictEqual(sd.document.length, 10)
