@@ -1,5 +1,5 @@
 /*
- *  test/truncate.js
+ *  test/remove.js
  *
  *  David Janes
  *  IOTDB.org
@@ -31,7 +31,7 @@ const _util = require("./_util")
 
 process.chdir(__dirname)
 
-describe("truncate", function() {
+describe("remove", function() {
     const TEST_FOLDER = "tmp"
 
     const MESSAGE = "Hello World\n你好，世界\nこんにちは世界\n"
@@ -54,117 +54,83 @@ describe("truncate", function() {
                 .make(sd => {
                     delete sd.path
                 })
-                .then(fs.truncate)
-                .then(_util.auto_fail(done))
-                .catch(_util.ok_error(done))
-        })
-        it("fs$length must be integer", function(done) {
-            _.promise.make({
-                path: PATH,
-                document: MESSAGE,
-            })
-                .then(fs.mkdir.parent)
                 .then(fs.remove)
-                .then(fs.write.utf8)
-                .then(fs.read.utf8)
-                .make(sd => {
-                    assert.strictEqual(sd.document.length, MESSAGE.length)
-                })
-
-                .add("fs$length", "10")
-                .then(fs.truncate)
                 .then(_util.auto_fail(done))
                 .catch(_util.ok_error(done))
         })
     })
 
     describe("good", function() {
-        it("works", function(done) {
+        it("remove works", function(done) {
             _.promise.make({
                 path: PATH,
                 document: MESSAGE,
             })
                 .then(fs.mkdir.parent)
-                .then(fs.remove)
                 .then(fs.write.utf8)
-                .then(fs.read.utf8)
+                .then(fs.stat)
                 .make(sd => {
-                    assert.strictEqual(sd.document.length, MESSAGE.length)
+                    assert.ok(sd.exists)
                 })
 
-                .then(fs.truncate)
-                .then(fs.read.utf8)
+                .then(fs.remove)
+                .then(fs.remove)
+
+                .then(fs.stat)
                 .make(sd => {
-                    assert.strictEqual(sd.document.length, 0)
+                    assert.ok(!sd.exists)
                 })
+
                 .end(done)
         })
-        it("works with length", function(done) {
+        it("remove.recursive works", function(done) {
             _.promise.make({
                 path: PATH,
                 document: MESSAGE,
             })
                 .then(fs.mkdir.parent)
-                .then(fs.remove)
                 .then(fs.write.utf8)
-                .then(fs.read.utf8)
+                .then(fs.stat)
                 .make(sd => {
-                    assert.strictEqual(sd.document.length, MESSAGE.length)
+                    assert.ok(sd.exists)
                 })
 
-                .add("fs$length", 10)
-                .then(fs.truncate)
-                .then(fs.read.utf8)
+                .add("path", path.dirname(PATH))
+                .then(fs.remove.recursive)
+                .then(fs.remove.recursive)
+
+                .then(fs.stat)
                 .make(sd => {
-                    assert.strictEqual(sd.document.length, 10)
+                    assert.ok(!sd.exists)
                 })
+
                 .end(done)
         })
-    })
-    describe("parameterized", function() {
-        if (1) it("works", function(done) {
+        it("remove.directory works", function(done) {
+            const PATH = "tmp-2/xxx"
+            
             _.promise.make({
                 path: PATH,
                 document: MESSAGE,
             })
                 .then(fs.mkdir.parent)
-                .then(fs.remove)
                 .then(fs.write.utf8)
-                .then(fs.read.utf8)
+                .then(fs.stat)
                 .make(sd => {
-                    assert.strictEqual(sd.document.length, MESSAGE.length)
+                    assert.ok(sd.exists)
                 })
 
-                .make(sd => {
-                    delete sd.path
-                })
-                .then(fs.truncate.p(PATH))
-
-                .then(fs.read.p(PATH, "utf8"))
-                .make(sd => {
-                    assert.strictEqual(sd.document.length, 0)
-                })
-                .end(done)
-        })
-        if (1) it("works with length", function(done) {
-            _.promise.make({
-                path: PATH,
-                document: MESSAGE,
-            })
-                .then(fs.mkdir.parent)
                 .then(fs.remove)
-                .then(fs.write.utf8)
-                .then(fs.read.utf8)
+
+                .add("path", path.dirname(PATH))
+                .then(fs.remove.directory)
+                .then(fs.remove.directory)
+
+                .then(fs.stat)
                 .make(sd => {
-                    assert.strictEqual(sd.document.length, MESSAGE.length)
+                    assert.ok(!sd.exists)
                 })
 
-                .then(fs.truncate.p(undefined, 10))
-
-                .then(fs.read.p(PATH, "utf8"))
-                .make(sd => {
-                    assert.strictEqual(sd.document.length, 10)
-                })
                 .end(done)
         })
     })
