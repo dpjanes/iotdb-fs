@@ -122,7 +122,7 @@ describe("truncate", function() {
         })
     })
     describe("parameterized", function() {
-        if (1) it("works", function(done) {
+        it("works", function(done) {
             _.promise.make({
                 path: PATH,
                 document: MESSAGE,
@@ -146,7 +146,7 @@ describe("truncate", function() {
                 })
                 .end(done)
         })
-        if (1) it("works with length", function(done) {
+        it("works with length", function(done) {
             _.promise.make({
                 path: PATH,
                 document: MESSAGE,
@@ -159,7 +159,7 @@ describe("truncate", function() {
                     assert.strictEqual(sd.document.length, MESSAGE.length)
                 })
 
-                .then(fs.truncate.p(undefined, 10))
+                .then(fs.truncate.p(null, 10))
 
                 .then(fs.read.p(PATH, "utf8"))
                 .make(sd => {
