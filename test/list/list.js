@@ -73,7 +73,7 @@ describe("list", function() {
         it("custom sorter", function(done) {
             _.promise({
                 path: "data",
-                sorter: test_sorter,
+                fs$sorter: test_sorter,
             })
                 .then(fs.list)
                 .make(sd => {
@@ -95,7 +95,7 @@ describe("list", function() {
         it("bad folder with otherwise_paths", function(done) {
             _.promise({
                 path: "data-does-not-exist",
-                otherwise_paths: [],
+                fs$otherwise_paths: [],
             })
                 .then(fs.list)
                 .make(sd => {
@@ -109,7 +109,7 @@ describe("list", function() {
         it("filter", function(done) {
             _.promise({
                 path: "data",
-                filter: name => name.endsWith(".json"),
+                fs$filter_name: name => name.endsWith(".json"),
             })
                 .then(fs.list)
                 .make(sd => {
@@ -123,7 +123,7 @@ describe("list", function() {
         it("filter_path", function(done) {
             _.promise({
                 path: "data",
-                filter_path: path => path.endsWith(".json") && path.startsWith("data/"),
+                fs$filter_path: path => path.endsWith(".json") && path.startsWith("data/"),
             })
                 .then(fs.list)
                 .make(sd => {

@@ -1,9 +1,10 @@
 /*
- *  test/magic.js
+ *  test/read.jsons.js
  *
  *  David Janes
  *  IOTDB.org
- *  2019-11-16
+ *  2019-11-28
+ *  🦃
  *
  *  Copyright (2013-2020) David P. Janes
  *
@@ -30,14 +31,22 @@ const _util = require("./_util")
 
 process.chdir(__dirname);
 
-describe("read.json.magic", function() {
-    describe("read.json", function() {
+describe("read", function() {
+    describe("read.jsons", function() {
         describe("bad", function() {
             it("file does not exist", function(done) {
                 _.promise({
                     path: "data/does-not-exist",
                 })
-                    .then(fs.read.json.magic)
+                    .then(fs.read.jsons)
+                    .then(_util.auto_fail(done))
+                    .catch(_util.ok_error(done))
+            })
+            it("file is not an array", function(done) {
+                _.promise({
+                    path: "data/a.json",
+                })
+                    .then(fs.read.jsons)
                     .then(_util.auto_fail(done))
                     .catch(_util.ok_error(done))
             })
@@ -45,7 +54,7 @@ describe("read.json.magic", function() {
                 _.promise({
                     path: "data/c.txt",
                 })
-                    .then(fs.read.json.magic)
+                    .then(fs.read.json)
                     .then(_util.auto_fail(done))
                     .catch(_util.ok_error(done))
             })
@@ -53,28 +62,17 @@ describe("read.json.magic", function() {
         describe("good", function() {
             it("works", function(done) {
                 _.promise({
-                    path: "data/a.json",
+                    path: "data/c.json",
                 })
-                    .then(fs.read.json.magic)
+                    .then(fs.read.jsons)
                     .then(sd => {
-                        const expected_json = { a: 0, b: 1, note: 'in data' }
+                        const got = sd.jsons
+                        const want = [ { "a": 1, "note": "in data" }, 2, 3 ]
 
-                        assert.deepEqual(sd.json, expected_json);
+                        assert.deepEqual(got, want)
                         assert.ok(!sd.document);
-
-                        done();
-                    })
-                    .catch(done)
-            })
-            it("works paramaterized", function(done) {
-                _.promise({
-                })
-                    .then(fs.read.json.magic.p("data/a.json"))
-                    .then(sd => {
-                        const expected_json = { a: 0, b: 1, note: 'in data' }
-
-                        assert.deepEqual(sd.json, expected_json);
-                        assert.ok(!sd.document);
+                        assert.ok(!sd.document_media_type);
+                        assert.ok(!sd.document_encoding);
 
                         done();
                     })
@@ -83,22 +81,9 @@ describe("read.json.magic", function() {
             it("otherwise", function(done) {
                 _.promise({
                     path: "data/does-not-exist",
-                    otherwise: 123, 
+                    fs$otherwise_jsons: 123, 
                 })
-                    .then(fs.read.json.magic)
-                    .then(sd => {
-                        const expected_json = 123;
-
-                        assert.deepEqual(sd.json, expected_json);
-
-                        done();
-                    })
-                    .catch(done)
-            })
-            it("otherwise parameterized", function(done) {
-                _.promise({
-                })
-                    .then(fs.read.json.magic.p("data/does-not-exist", 123))
+                    .then(fs.read.jsons)
                     .then(sd => {
                         const expected_json = 123;
 
@@ -111,9 +96,9 @@ describe("read.json.magic", function() {
             it("otherwise - file contains invalid JSON", function(done) {
                 _.promise({
                     path: "data/c.txt",
-                    otherwise: 123, 
+                    fs$otherwise_jsons: 123, 
                 })
-                    .then(fs.read.json.magic)
+                    .then(fs.read.jsons)
                     .then(sd => {
                         const got = 123
                         const want = 123;
@@ -124,50 +109,21 @@ describe("read.json.magic", function() {
             })
         })
     })
-    describe("read.stdin", function() {
-        beforeEach(function() {
-            const Readable = require('stream').Readable;
-            const s = new Readable();
-            s._read = _.noop;
-            s.push(JSON.stringify({ a: 1, b: [ 2, 3 ] }))
-            s.push(null);
-
-            fs.read.shims.stdin = s
-        })
-        afterEach(function() {
-            fs.read.shims.stdin = process.stdin
-        })
-
-        describe("bad", function() {
-        })
-        describe("good", function() {
-            it("works", function(done) {
-                _.promise({
-                    path: "-",
-                })
-                    .then(fs.read.json.magic)
-                    .then(sd => {
-                        assert.deepStrictEqual(sd.json, { a: 1, b: [ 2, 3 ] })
-                    })
-                    .end(done)
-            })
-        })
-    })
-    describe("read.yaml", function() {
+    describe("read.yamls", function() {
         describe("bad", function() {
             it("file does not exist", function(done) {
                 _.promise({
                     path: "data/does-not-exist",
                 })
-                    .then(fs.read.json.magic)
+                    .then(fs.read.yamls)
                     .then(_util.auto_fail(done))
                     .catch(_util.ok_error(done))
             })
-            it("file has multi YAML", function(done) {
+            it("invalid", function(done) {
                 _.promise({
-                    path: "data/multi.yaml",
+                    path: "data-2/invalid.yaml",
                 })
-                    .then(fs.read.json.magic)
+                    .then(fs.read.yamls)
                     .then(_util.auto_fail(done))
                     .catch(_util.ok_error(done))
             })
@@ -176,22 +132,24 @@ describe("read.json.magic", function() {
             it("file does not exist", function(done) {
                 _.promise({
                     path: "data/does-not-exist",
-                    otherwise: 123,
+                    fs$otherwise_jsons: 123,
                 })
-                    .then(fs.read.json.magic)
+                    .then(fs.read.yamls)
                     .make(sd => {
                         assert.deepEqual(sd.json, 123)
+                        assert.strictEqual(sd.json, sd.jsons)
                     })
                     .end(done)
             })
-            it("file has multi YAML", function(done) {
+            it("invalid", function(done) {
                 _.promise({
-                    path: "data/multi.yaml",
-                    otherwise: 123,
+                    path: "data-2/invalid.yaml",
+                    fs$otherwise_jsons: 123,
                 })
-                    .then(fs.read.json.magic)
+                    .then(fs.read.yamls)
                     .make(sd => {
                         assert.deepEqual(sd.json, 123)
+                        assert.strictEqual(sd.json, sd.jsons)
                     })
                     .end(done)
             })
@@ -201,13 +159,16 @@ describe("read.json.magic", function() {
                 _.promise({
                     path: "data/c.json",
                 })
-                    .then(fs.read.json.magic)
+                    .then(fs.read.yamls)
                     .then(sd => {
                         const got = sd.json
-                        const want = [ { "a": 1, "note": "in data" }, 2, 3 ]
+                        const want = [[ { "a": 1, "note": "in data" }, 2, 3 ]]
 
+                        assert.strictEqual(sd.json, sd.jsons)
                         assert.deepEqual(got, want)
                         assert.ok(!sd.document);
+                        assert.ok(!sd.document_media_type);
+                        assert.ok(!sd.document_encoding);
 
                         done();
                     })
@@ -217,13 +178,35 @@ describe("read.json.magic", function() {
                 _.promise({
                     path: "data/single.yaml",
                 })
-                    .then(fs.read.json.magic)
+                    .then(fs.read.yamls)
                     .then(sd => {
                         const got = sd.json
-                        const want = { a: 1, b: 2 }
+                        const want = [ { a: 1, b: 2 } ]
 
+                        assert.strictEqual(sd.json, sd.jsons)
                         assert.deepStrictEqual(got, want)
                         assert.ok(!sd.document);
+                        assert.ok(!sd.document_media_type);
+                        assert.ok(!sd.document_encoding);
+
+                        done();
+                    })
+                    .catch(done)
+            })
+            it("file has multi YAML", function(done) {
+                _.promise({
+                    path: "data/multi.yaml",
+                })
+                    .then(fs.read.yamls)
+                    .then(sd => {
+                        const got = sd.json
+                        const want = [{"a":1,"b":2},{"c":[{"e":1},{"f":"a","g":"hello"}]}]
+
+                        assert.strictEqual(sd.json, sd.jsons)
+                        assert.deepStrictEqual(got, want)
+                        assert.ok(!sd.document);
+                        assert.ok(!sd.document_media_type);
+                        assert.ok(!sd.document_encoding);
 
                         done();
                     })

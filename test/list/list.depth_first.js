@@ -93,7 +93,7 @@ describe("list.depth_first", function() {
         it("bad folder with otherwise_paths", function(done) {
             _.promise({
                 path: "data-does-not-exist",
-                otherwise_paths: [],
+                fs$otherwise_paths: [],
             })
                 .then(fs.list.depth_first)
                 .make(sd => {
@@ -107,7 +107,7 @@ describe("list.depth_first", function() {
         it("filter", function(done) {
             _.promise({
                 path: "data",
-                filter: name => name.endsWith(".json"),
+                fs$filter_name: name => name.endsWith(".json"),
             })
                 .then(fs.list.depth_first)
                 .make(sd => {
@@ -121,7 +121,7 @@ describe("list.depth_first", function() {
         it("custom sorter", function(done) {
             _.promise({
                 path: "data",
-                sorter: test_sorter,
+                fs$sorter: test_sorter,
             })
                 .then(fs.list.depth_first)
                 .make(sd => {
@@ -144,7 +144,7 @@ describe("list.depth_first", function() {
         it("filter_path", function(done) {
             _.promise({
                 path: "data",
-                filter_path: path => path.endsWith(".json") && path.startsWith("data/"),
+                fs$filter_path: path => path.endsWith(".json") && path.startsWith("data/"),
             })
                 .then(fs.list.depth_first)
                 .make(sd => {
@@ -158,7 +158,7 @@ describe("list.depth_first", function() {
         it("parer", function(done) {
             _.promise({
                 path: "data",
-                parer: name => name === "subfolder",
+                fs$parer_name: name => name === "subfolder",
             })
                 .then(fs.list.depth_first)
                 .make(sd => {
@@ -172,7 +172,7 @@ describe("list.depth_first", function() {
         it("parer (no hits)", function(done) {
             _.promise({
                 path: "data",
-                parer: name => name === "does-not-exist",
+                fs$parer_name: name => name === "does-not-exist",
             })
                 .then(fs.list.depth_first)
                 .make(sd => {
@@ -186,7 +186,7 @@ describe("list.depth_first", function() {
         it("parer_path", function(done) {
             _.promise({
                 path: "data",
-                parer_path: path => path === "data/subfolder",
+                fs$parer_path: path => path === "data/subfolder",
             })
                 .then(fs.list.depth_first)
                 .make(sd => {
@@ -200,8 +200,8 @@ describe("list.depth_first", function() {
         it("parer + filter", function(done) {
             _.promise({
                 path: "data",
-                parer: name => name === "subfolder",
-                filter: name => name.endsWith(".json"),
+                fs$parer_name: name => name === "subfolder",
+                fs$filter_name: name => name.endsWith(".json"),
             })
                 .then(fs.list.depth_first)
                 .make(sd => {
