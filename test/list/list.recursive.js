@@ -1,9 +1,10 @@
 /*
- *  test/recursive.js
+ *  test/list/list.recursive.js
  *
  *  David Janes
  *  IOTDB.org
- *  2017-08-23
+ *  2019-11-28
+ *  🦃
  *
  *  Copyright (2013-2020) David P. Janes
  *
@@ -31,6 +32,20 @@ const _util = require("../_util")
 
 process.chdir(path.join(__dirname, ".."))
 
+const test_sorter = (a, b) => {
+    if (a === "multi.yaml") {
+        return -1
+    } else if (b === "multi.yaml") {
+        return 1
+    } else if (a < b) {
+        return -1;
+    } else if (a > b) {
+        return 1
+    } else {
+        return 0
+    }
+}
+
 describe("list.recursive", function() {
     describe("bad", function() {
         it("bad folder - recursive", function(done) {
@@ -56,6 +71,39 @@ describe("list.recursive", function() {
                 })
                 .end(done)
         })
+        it("bad folder with otherwise_paths", function(done) {
+            _.promise({
+                path: "data-does-not-exist",
+                otherwise_paths: [],
+            })
+                .then(fs.list.recursive)
+                .make(sd => {
+                    const got = sd.paths
+                    const expected = []
+
+                    assert.deepEqual(got, expected)
+                })
+                .end(done)
+        })
+        it("ensure breadth first", function(done) {
+            _.promise({
+                path: "data",
+            })
+                .then(fs.list.recursive)
+                .make(sd => {
+                    const got = []
+                    sd.paths.forEach(p => {
+                        p = path.dirname(p)
+                        if (got.indexOf(p) === -1) {
+                            got.push(p)
+                        }
+                    })
+                    const expected = [ "data", "data/subfolder", ]
+
+                    assert.deepEqual(got, expected)
+                })
+                .end(done)
+        })
         it("filter", function(done) {
             _.promise({
                 path: "data",
@@ -66,6 +114,29 @@ describe("list.recursive", function() {
                     const got = sd.paths.sort()
                     const expected = [ "data/a.json", "data/b.json", "data/c.json", "data/subfolder/a.json" ]
 
+
+                    assert.deepEqual(got, expected)
+                })
+                .end(done)
+        })
+        it("custom sorter", function(done) {
+            _.promise({
+                path: "data",
+                sorter: test_sorter,
+            })
+                .then(fs.list.recursive)
+                .make(sd => {
+                    const got = sd.paths
+                    const expected = [
+                        'data/multi.yaml',
+                        'data/a.json',
+                        'data/b.json',
+                        'data/c.json',
+                        'data/c.txt',
+                        'data/single.yaml',
+                        'data/subfolder',
+                        'data/subfolder/a.json'
+                    ]
 
                     assert.deepEqual(got, expected)
                 })

@@ -1,5 +1,5 @@
 /*
- *  test/list.js
+ *  test/list/list.js
  *
  *  David Janes
  *  IOTDB.org
@@ -31,6 +31,20 @@ const _util = require("../_util")
 
 process.chdir(path.join(__dirname, ".."))
 
+const test_sorter = (a, b) => {
+    if (a === "multi.yaml") {
+        return -1
+    } else if (b === "multi.yaml") {
+        return 1
+    } else if (a < b) {
+        return -1;
+    } else if (a > b) {
+        return 1
+    } else {
+        return 0
+    }
+}
+
 describe("list", function() {
     describe("bad", function() {
         it("bad folder", function(done) {
@@ -49,8 +63,44 @@ describe("list", function() {
             })
                 .then(fs.list)
                 .make(sd => {
-                    const got = sd.paths.sort()
+                    const got = sd.paths
                     const expected = [ "data/a.json", "data/b.json", "data/c.json", "data/c.txt", "data/multi.yaml", "data/single.yaml", "data/subfolder" ]
+
+                    assert.deepEqual(got, expected)
+                })
+                .end(done)
+        })
+        it("custom sorter", function(done) {
+            _.promise({
+                path: "data",
+                sorter: test_sorter,
+            })
+                .then(fs.list)
+                .make(sd => {
+                    const got = sd.paths
+                    const expected = [ 
+                        "data/multi.yaml", 
+                        "data/a.json", 
+                        "data/b.json", 
+                        "data/c.json", 
+                        "data/c.txt", 
+                        "data/single.yaml", 
+                        "data/subfolder"
+                    ]
+
+                    assert.deepEqual(got, expected)
+                })
+                .end(done)
+        })
+        it("bad folder with otherwise_paths", function(done) {
+            _.promise({
+                path: "data-does-not-exist",
+                otherwise_paths: [],
+            })
+                .then(fs.list)
+                .make(sd => {
+                    const got = sd.paths
+                    const expected = []
 
                     assert.deepEqual(got, expected)
                 })
