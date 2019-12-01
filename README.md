@@ -44,7 +44,7 @@ Failures will reported in `self.outputs`.
 
     _.promise.make({
         path: ".",
-        filter: name => name.endsWith(".json"),
+        fs$filter_name: name => name.endsWith(".json"),
     })
         .then(fs.list)
         .then(fs.all(fs.read.json))
@@ -85,7 +85,7 @@ This will only return files named `*.json`.
 
     _.promise.make({
         path: ".",
-        filter: name => name.endsWith(".json"),
+        fs$file_name: name => name.endsWith(".json"),
     })
         .then(fs.list.recursive)
         .then(sd => console.log("+", "ok", sd.paths))
@@ -101,7 +101,7 @@ In the following examples, files in the `.git` folder are ignored
 
     _.promise.make({
         path: ".",
-        parer: name === ".git",
+        fs$parer_name: name === ".git",
     })
         .then(fs.list.recursive)
         .then(sd => console.log("+", "ok", sd.paths))
@@ -110,7 +110,7 @@ In the following examples, files in the `.git` folder are ignored
 
     _.promise.make({
         path: ".",
-        parer: name === ".git",
+        fs$parer_name: name === ".git",
     })
         .then(fs.list.depth_first)
         .then(sd => console.log("+", "ok", sd.paths))
@@ -119,7 +119,7 @@ In the following examples, files in the `.git` folder are ignored
 
     _.promise.make({
         path: ".",
-        sorter: fs.sorter.natural_ignore_case,
+        fs$sorter: fs.sorter.natural_ignore_case,
     })
         .then(fs.list)
         .then(sd => console.log("+", "ok", sd.paths))
