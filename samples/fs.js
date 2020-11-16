@@ -8,18 +8,33 @@
  *  Copyright (2013-2017) David Janes
  */
 
-"use strict";
+"use strict"
 
-const _ = require("iotdb-helpers");
-const fs = require("..");
+const _ = require("iotdb-helpers")
+const fs = require("..")
 
-const assert = require("assert");
+const minimist = require("minimist")
+const path = require("path")
 
-const minimist = require('minimist');
+const ad = minimist(process.argv.slice(2), {
+    string: [
+        "path",
+    ],
+    default: {
+        "path": path.join(__dirname, "data", "bbc_congo.txt"),
+    }
+});
 
-const ad = minimist(process.argv.slice(2));
+const _normalize = s => (s || "").replace(/-/g, "_")
+const action_name = ad._[0]
 
-const action = (name) => ad._.indexOf(name) > -1;
+const actions = []
+const action = name => {
+    actions.push(name)
+
+    return _normalize(action_name) === _normalize(name)
+}
+
 
 if (action("list")) {
     _.promise.make({
@@ -28,9 +43,7 @@ if (action("list")) {
         .then(fs.list)
         .then(sd => console.log("+", "ok", sd.paths))
         .catch(error => console.log("#", error))
-}
-
-if (action("list-recursive")) {
+} else if (action("list-recursive")) {
     _.promise.make({
         path: "..",
         parer: path => path === ".git",
@@ -38,9 +51,7 @@ if (action("list-recursive")) {
         .then(fs.list.recursive)
         .then(sd => console.log("+", "ok", sd.paths))
         .catch(error => console.log("#", error))
-}
-
-if (action("list-depth-first")) {
+} else if (action("list-depth-first")) {
     _.promise.make({
         path: "..",
         parer: path => path === ".git",
@@ -49,9 +60,7 @@ if (action("list-depth-first")) {
         .then(fs.list.depth_first)
         .then(sd => console.log("+", "ok", sd.paths))
         .catch(error => console.log("#", error))
-}
-
-if (action("read-jsons")) {
+} else if (action("read-jsons")) {
     _.promise.make({
         path: "..",
     })
@@ -60,9 +69,7 @@ if (action("read-jsons")) {
         .then(sd => _.promise.each(sd, "path", fs.read.json, sd => ({ path: sd.path, json: sd.json })))
         .then(sd => console.log("+", "ok", sd.outputs))
         .catch(error => console.log("#", error))
-}
-
-// this is way better than above
+} else // this is way better than above
 if (action("all-jsons")) {
     _.promise.make({
         path: "..",
@@ -72,9 +79,7 @@ if (action("all-jsons")) {
         .then(fs.all(fs.read.json))
         .then(sd => console.log("+", "ok", sd.jsons))
         .catch(error => console.log("#", error))
-}
-
-if (action("write.json")) {
+} else if (action("write.json")) {
     _.promise.make({
         path: "delete-me/write-json.json",
         json: { "hello": "world" },
@@ -83,9 +88,7 @@ if (action("write.json")) {
         .then(fs.write.json)
         .then(sd => console.log("+", "ok", sd.path))
         .catch(error => console.log("#", error))
-}
-
-if (action("write.utf8")) {
+} else if (action("write.utf8")) {
     _.promise.make({
         path: "delete-me/write-json.txt",
         document: "Hello, world / 你好，世界\n",
@@ -94,9 +97,7 @@ if (action("write.utf8")) {
         .then(fs.write.utf8)
         .then(sd => console.log("+", "ok", sd.path))
         .catch(error => console.log("#", error))
-}
-
-if (action("write")) {
+} else if (action("write")) {
     _.promise.make({
         path: "delete-me/write-json.txt",
         document: "Hello, world / 你好，世界\n",
@@ -106,9 +107,7 @@ if (action("write")) {
         .then(fs.write)
         .then(sd => console.log("+", "ok", sd.path))
         .catch(error => console.log("#", error))
-}
-
-if (action("write.buffer")) {
+} else if (action("write.buffer")) {
     _.promise.make({
         path: "delete-me/write-json.txt",
         document: Buffer.from("Hello, world / 你好，世界\n", "utf-8"),
@@ -117,23 +116,17 @@ if (action("write.buffer")) {
         .then(fs.write.buffer)
         .then(sd => console.log("+", "ok", sd.path))
         .catch(error => console.log("#", error))
-}
-
-if (action("tmpfile")) {
+} else if (action("tmpfile")) {
     _.promise.make({})
         .then(fs.tmpfile)
         .then(sd => console.log("+", "ok", sd.path))
         .catch(error => console.log("#", error))
-}
-
-if (action("tmpfile.extension")) {
+} else if (action("tmpfile.extension")) {
     _.promise.make({})
         .then(fs.tmpfile.extension(".png"))
         .then(sd => console.log("+", "ok", sd.path))
         .catch(error => console.log("#", error))
-}
-
-if (action("append")) {
+} else if (action("append")) {
     _.promise.make({
         path: "delete-me/append.txt",
     })
@@ -143,4 +136,9 @@ if (action("append")) {
         .then(fs.append.line(null, "C"))
         .then(sd => console.log("+", "ok", sd.path))
         .catch(error => console.log("#", error))
+} else if (!action_name) {
+    console.log("#", "action required - should be one of:", actions.join(", "))
+} else {
+    console.log("#", "unknown action - should be one of:", actions.join(", "))
 }
+
