@@ -136,6 +136,18 @@ if (action("all-jsons")) {
         .then(fs.append.line(null, "C"))
         .then(sd => console.log("+", "ok", sd.path))
         .catch(error => console.log("#", error))
+} else if (action("watch")) {
+    _.promise.make({
+        path: ".",
+        watcher: _.promise(self => {
+            console.log("-", self.watch_event, self.path)
+        }),
+    })
+        .then(fs.watch)
+        .make(sd => {
+            setTimeout(() => _.promise(sd).then(fs.watch.close), 60 * 1000)
+        })
+        .catch(error => console.log("#", error))
 } else if (!action_name) {
     console.log("#", "action required - should be one of:", actions.join(", "))
 } else {
