@@ -26,13 +26,13 @@ const _ = require("iotdb-helpers")
 
 const fs = require("fs")
 
-const rx = require("rxjs")
-const rxops = require("rxjs/operators")
-
 /**
  */
 const watch = _.promise(self => {
     _.promise.validate(self, watch)
+
+    const rx = require("rxjs")
+    const rxops = require("rxjs/operators")
 
     self.observable = rx.Observable.create((observer) => {
             const watcher = fs.watch(self.path, (event_type, filename) => {
