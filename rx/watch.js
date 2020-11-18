@@ -50,7 +50,7 @@ const watch = _.promise(self => {
 
             observer.next({
                 _type: event_type,
-                path: filename || null,
+                path: filename ? fs.join(self.path, filename) : null,
                 folder: self.path,
             })
         })

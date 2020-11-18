@@ -26,5 +26,6 @@ module.exports = Object.assign(
     {},
     require("./watch"),
     require("./list"),
+    require("./observe"),
     {}
 )

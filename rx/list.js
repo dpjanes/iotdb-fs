@@ -30,12 +30,20 @@ const list = _.promise((self, done) => {
     _.promise.validate(self, list)
 
     const rx = require("rxjs")
+    const rxops = require("rxjs/operators")
     const fs = require("..")
 
     _.promise(self)
         .then(fs.list)
         .make(sd => {
             sd.observable = rx.from(sd.paths)
+                .pipe(
+                    rxops.map(p => ({
+                        _type: "exists",
+                        path: p,
+                        folder: self.path,
+                    }))
+                )
         })
         .end(done, self, list)
 })
@@ -69,12 +77,20 @@ const recursive = _.promise((self, done) => {
     _.promise.validate(self, recursive)
 
     const rx = require("rxjs")
+    const rxops = require("rxjs/operators")
     const fs = require("..")
 
     _.promise(self)
         .then(fs.list.recursive)
         .make(sd => {
             sd.observable = rx.from(sd.paths)
+                .pipe(
+                    rxops.map(p => ({
+                        _type: "exists",
+                        path: p,
+                        folder: self.path,
+                    }))
+                )
         })
         .end(done, self, recursive)
 })
@@ -112,7 +128,7 @@ if (require.main === module) {
     const rxops = require("rxjs/operators")
 
     _.promise.make({
-        path: "..",
+        path: "/Users/david/iotdb/iot/iotdb-fs/",
     })
         .then(list.recursive)
         .make(sd => {

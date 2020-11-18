@@ -1,5 +1,5 @@
 /*
- *  rx/observable.js
+ *  rx/observe.js
  *
  *  David Janes
  *  IOTDB.org
@@ -26,105 +26,99 @@ const _ = require("iotdb-helpers")
 
 /**
  */
-const observable = _.promise((self, done) => {
-    _.promise.validate(self, observable)
-
+const _merge = _.promise((self, done) => {
     const rx = require("rxjs")
     const rxops = require("rxjs/operators")
+
+    _.promise(self)
+        .validate(_merge)
+
+        .make(sd => {
+            sd.observable = rx.concat(
+                sd.list_observable,
+                rx.of({
+                    _type: "listed",
+                    path: null,
+                    folder: self.path,
+                }),
+                sd.watch_observable
+            )
+        })
+
+        .end(done, self, _merge)
+})
+
+_merge.method = "rx.observe/_merge"
+_merge.description = ``
+_merge.requires = {
+    path: _.is.String,
+    list_observable: _.is.Object,
+    watch_observable: _.is.Object,
+}
+_merge.produces = {
+    observable: _.is.Object,
+}
+
+/**
+ */
+const observe = _.promise((self, done) => {
     const fs = require("..")
 
     _.promise(self)
+        .validate(observe)
+
         .then(fs.rx.list)
         .add("observable:list_observable")
 
         .then(fs.rx.watch)
         .add("observable:watch_observable")
 
-        .make(sd => {
-            sd.list_observable = sd.list_observable
-                .pipe(
-                    rxops.map(p => ({
-                        _type: "exists",
-                        path: p,
-                        folder: self.path,
-                    }))
-                )
+        .then(_merge)
 
-            sd.observable = rx.concat(
-                sd.list_observable,
-                rx.of({
-                    _type: "listed",
-                    path: null,
-                    folder: self.path,
-                }),
-                sd.watch_observable
-            )
-        })
-
-        .end(done, self, observable)
+        .end(done, self, observe)
 })
 
-observable.method = "observable"
-observable.description = `Return an rx.observer to a Folder.
+observe.method = "observe"
+observe.description = `Return an rx.observer to a Folder.
     This will list all existing files and all modifications
     in the futre.
 
     _type="exists" will be emitted for existing files
     _type="listed" will be emitted when end of existing files
 `
-observable.requires = {
+observe.requires = {
     path: _.is.String,
 }
-observable.accepts = {
+observe.accepts = {
     fs$filter_name: _.is.Function,
     fs$filter_path: _.is.Function,
     fs$sorter: _.is.Function,
     fs$otherwise_paths: _.is.Array.of.String,
 }
-observable.produces = {
+observe.produces = {
     observable: _.is.Object,
 }
-observable.params = {
+observe.params = {
     path: _.p.normal,
 }
-observable.p = _.p(observable)
+observe.p = _.p(observe)
 
 /**
  */
 const recursive = _.promise((self, done) => {
-    _.promise.validate(self, recursive)
-
-    const rx = require("rxjs")
-    const rxops = require("rxjs/operators")
     const fs = require("..")
 
     _.promise(self)
+        .validate(recursive)
+
         .then(fs.rx.list.recursive)
         .add("observable:list_observable")
 
         .then(fs.rx.watch)
         .add("observable:watch_observable")
 
-        .make(sd => {
-            sd.list_observable = sd.list_observable
-                .pipe(
-                    rxops.map(p => ({
-                        _type: "exists",
-                        path: p,
-                        folder: self.path,
-                    }))
-                )
+        .then(_merge)
 
-            sd.observable = rx.concat(
-                sd.list_observable,
-                rx.of({
-                    _type: "listed",
-                    path: null,
-                    folder: self.path,
-                }),
-                sd.watch_observable
-            )
-        })
         .end(done, self, recursive)
 })
 
@@ -153,8 +147,8 @@ recursive.p = _.p(recursive)
 /**
  *  API
  */
-exports.observable = observable
-exports.observable.recursive = recursive
+exports.observe = observe
+exports.observe.recursive = recursive
 
 if (require.main === module) {
     const rxops = require("rxjs/operators")
@@ -163,7 +157,7 @@ if (require.main === module) {
         path: "..",
         fs$filter_path: name => name !== "xxx"
     })
-        .then(observable.recursive)
+        .then(observe.recursive)
         .make(sd => {
             const subscription = sd.observable
                 .subscribe({
