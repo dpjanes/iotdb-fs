@@ -64,25 +64,67 @@ list.params = {
 list.p = _.p(list)
 
 /**
+ */
+const recursive = _.promise((self, done) => {
+    _.promise.validate(self, recursive)
+
+    const rx = require("rxjs")
+    const fs = require("..")
+
+    _.promise(self)
+        .then(fs.list.recursive)
+        .make(sd => {
+            sd.observable = rx.from(sd.paths)
+        })
+        .end(done, self, recursive)
+})
+
+recursive.method = "rx.list.recursive"
+recursive.description = `Return an rx.observer to recursively list folder
+    
+    Right now we just us normal fs.recursive in the background,
+    but this will be made more efficient in the future
+`
+recursive.requires = {
+    path: _.is.String,
+}
+recursive.accepts = {
+    fs$filter_name: _.is.Function,
+    fs$filter_path: _.is.Function,
+    fs$sorter: _.is.Function,
+    fs$otherwise_paths: _.is.Array.of.String,
+}
+recursive.produces = {
+    observable: _.is.Object,
+}
+recursive.params = {
+    path: _.p.normal,
+}
+recursive.p = _.p(recursive)
+
+/**
  *  API
  */
 exports.list = list
+exports.list.recursive = recursive
 
-/*
-_.promise.make({
-    path: ".",
-})
-    .then(list)
-    .make(sd => {
-        try {
-            const subscription = sd.observable
-                .subscribe({
-                    next: d => console.log(d)
-                });
+if (require.main === module) {
+    const rxops = require("rxjs/operators")
 
-        } catch (x) {
-            console.log("X", x)
-        }
+    _.promise.make({
+        path: "..",
     })
-    .catch(error => console.log(_.error.message(error)))
-*/
+        .then(list.recursive)
+        .make(sd => {
+            try {
+                const subscription = sd.observable
+                    .subscribe({
+                        next: d => console.log(d)
+                    });
+
+            } catch (x) {
+                console.log("X", x)
+            }
+        })
+        .catch(error => console.log(_.error.message(error)))
+}
