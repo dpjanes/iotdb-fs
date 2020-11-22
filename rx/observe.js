@@ -35,9 +35,14 @@ const _merge = _.promise((self, done) => {
 
         .make(sd => {
             sd.observable = rx.concat(
+                rx.of({
+                    _type: "start",
+                    path: null,
+                    folder: self.path,
+                }),
                 sd.list_observable,
                 rx.of({
-                    _type: "listed",
+                    _type: "end",
                     path: null,
                     folder: self.path,
                 }),
@@ -83,8 +88,9 @@ observe.description = `Return an rx.observer to a Folder.
     This will list all existing files and all modifications
     in the futre.
 
+    _type="start" will be emitted at beginning
     _type="exists" will be emitted for existing files
-    _type="listed" will be emitted when end of existing files
+    _type="end" will be emitted when end of existing files
 `
 observe.requires = {
     path: _.is.String,
@@ -152,12 +158,14 @@ exports.observe.recursive = recursive
 
 if (require.main === module) {
     const rxops = require("rxjs/operators")
+    const os = require("os")
+    const path = require("path")
 
     _.promise.make({
-        path: "..",
-        fs$filter_path: name => name !== "xxx"
+        path: path.join(os.homedir(), "Downloads")
+        // fs$filter_path: name => name !== "xxx"
     })
-        .then(observe.recursive)
+        .then(observe)
         .make(sd => {
             const subscription = sd.observable
                 .subscribe({
