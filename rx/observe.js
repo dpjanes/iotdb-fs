@@ -57,11 +57,11 @@ _merge.method = "rx.observe/_merge"
 _merge.description = ``
 _merge.requires = {
     path: _.is.String,
-    list_observable: _.is.Object,
-    watch_observable: _.is.Object,
+    list_observable: _.is.rx.Observable,
+    watch_observable: _.is.rx.Observable,
 }
 _merge.produces = {
-    observable: _.is.Object,
+    observable: _.is.rx.Observable,
 }
 
 /**
@@ -102,7 +102,7 @@ observe.accepts = {
     fs$otherwise_paths: _.is.Array.of.String,
 }
 observe.produces = {
-    observable: _.is.Object,
+    observable: _.is.rx.Observable,
 }
 observe.params = {
     path: _.p.normal,
@@ -143,7 +143,7 @@ recursive.accepts = {
     fs$otherwise_paths: _.is.Array.of.String,
 }
 recursive.produces = {
-    observable: _.is.Object,
+    observable: _.is.rx.Observable,
 }
 recursive.params = {
     path: _.p.normal,

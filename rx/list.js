@@ -64,7 +64,7 @@ list.accepts = {
     fs$otherwise_paths: _.is.Array.of.String,
 }
 list.produces = {
-    observable: _.is.Object,
+    observable: _.is.rx.Observable,
 }
 list.params = {
     path: _.p.normal,

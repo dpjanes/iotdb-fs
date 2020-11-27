@@ -86,7 +86,7 @@ watch.accepts = {
     fs$filter_path: _.is.Function,
 }
 watch.produces = {
-    observable: _.is.Object,
+    observable: _.is.rx.Observable,
 }
 watch.params = {
     path: _.p.normal,
