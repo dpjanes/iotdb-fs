@@ -49,7 +49,7 @@ const watch = _.promise(self => {
             }
 
             observer.next({
-                _type: event_type,
+                __type: event_type,
                 path: filename ? fs.join(self.path, filename) : null,
                 folder: self.path,
             })
@@ -74,7 +74,7 @@ watch.description = `
         path: the filename (relative to the folder being listed)
         folder: the folder being listed
 
-    We use "_type" to be consistent with iotdb-sqlite,
+    We use "__type" to be consistent with iotdb-sqlite,
     iotdb-postgres and iotdb-mongodb. Basically: injected
     metadata that can't be saved
 `

@@ -37,9 +37,16 @@ describe("remove", function() {
     const MESSAGE = "Hello World\n你好，世界\nこんにちは世界\n"
     const PATH = path.join(TEST_FOLDER, "out.txt")
 
+    before(function() {
+        _.QUIET = true
+    })
+    after(function() {
+        _.QUIET = false
+    })
+
     describe("bad", function() {
         it("path required", function(done) {
-            _.promise.make({
+            _.promise({
                 path: PATH,
                 document: MESSAGE,
             })
@@ -62,7 +69,7 @@ describe("remove", function() {
 
     describe("good", function() {
         it("remove works", function(done) {
-            _.promise.make({
+            _.promise({
                 path: PATH,
                 document: MESSAGE,
             })
@@ -81,10 +88,10 @@ describe("remove", function() {
                     assert.ok(!sd.exists)
                 })
 
-                .end(done)
+                .end(done, {})
         })
         it("remove.recursive works", function(done) {
-            _.promise.make({
+            _.promise({
                 path: PATH,
                 document: MESSAGE,
             })
@@ -104,12 +111,12 @@ describe("remove", function() {
                     assert.ok(!sd.exists)
                 })
 
-                .end(done)
+                .end(done, {})
         })
         it("remove.directory works", function(done) {
             const PATH = "tmp-2/xxx"
             
-            _.promise.make({
+            _.promise({
                 path: PATH,
                 document: MESSAGE,
             })
@@ -131,7 +138,7 @@ describe("remove", function() {
                     assert.ok(!sd.exists)
                 })
 
-                .end(done)
+                .end(done, {})
         })
     })
 })

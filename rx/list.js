@@ -39,7 +39,7 @@ const list = _.promise((self, done) => {
             sd.observable = rx.from(sd.paths)
                 .pipe(
                     rxops.map(p => ({
-                        _type: "exists",
+                        __type: "exists",
                         path: p,
                         folder: self.path,
                     }))
@@ -86,7 +86,7 @@ const recursive = _.promise((self, done) => {
             sd.observable = rx.from(sd.paths)
                 .pipe(
                     rxops.map(p => ({
-                        _type: "exists",
+                        __type: "exists",
                         path: p,
                         folder: self.path,
                     }))

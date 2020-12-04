@@ -36,13 +36,13 @@ const _merge = _.promise((self, done) => {
         .make(sd => {
             sd.observable = rx.concat(
                 rx.of({
-                    _type: "start",
+                    __type: "start",
                     path: null,
                     folder: self.path,
                 }),
                 sd.list_observable,
                 rx.of({
-                    _type: "end",
+                    __type: "end",
                     path: null,
                     folder: self.path,
                 }),
@@ -88,9 +88,9 @@ observe.description = `Return an rx.observer to a Folder.
     This will list all existing files and all modifications
     in the futre.
 
-    _type="start" will be emitted at beginning
-    _type="exists" will be emitted for existing files
-    _type="end" will be emitted when end of existing files
+    __type="start" will be emitted at beginning
+    __type="exists" will be emitted for existing files
+    __type="end" will be emitted when end of existing files
 `
 observe.requires = {
     path: _.is.String,
