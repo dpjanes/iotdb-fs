@@ -5,8 +5,8 @@
     }, 
     "dependencies": {
         "iotdb-errors": "~3.1.9", 
-        "iotdb-helpers": "~3.5.1", 
-        "mime": "~2.4.6"
+        "iotdb-helpers": "~3.5.3", 
+        "mime": "~2.4.7"
     }, 
     "description": "POP file system operations", 
     "homepage": "https://github.com/dpjanes/node-iotdb", 
